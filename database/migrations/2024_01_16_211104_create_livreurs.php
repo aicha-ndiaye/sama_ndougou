@@ -1,11 +1,10 @@
 <?php
 
 use App\Models\Commande;
-use App\Models\Panier;
-use App\Models\Produit;
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Livraison;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -14,7 +13,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('livreurs', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
             $table->string('prenom');
@@ -23,9 +22,10 @@ return new class extends Migration
             $table->string('password');
             $table->string('adresse');
             $table->string('telephone');
-            $table->enum('role',['client','admin']);
+            $table->enum('statut',['disponible','occupe']);
+            $table->foreignIdFor(Commande::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Livraison::class)->constrained()->onDelete('cascade');
             $table->string('image')->nullable();
-            $table->rememberToken();
             $table->timestamps();
         });
     }
@@ -35,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('livreurs');
     }
 };
