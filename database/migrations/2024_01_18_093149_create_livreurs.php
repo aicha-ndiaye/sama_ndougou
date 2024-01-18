@@ -1,7 +1,6 @@
 <?php
 
-use App\Models\Commande;
-use App\Models\Livraison;
+use App\Models\Role;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -15,17 +14,8 @@ return new class extends Migration
     {
         Schema::create('livreurs', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            $table->string('prenom');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('adresse');
-            $table->string('telephone');
             $table->enum('statut',['disponible','occupe']);
-            $table->foreignIdFor(Commande::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Livraison::class)->constrained()->onDelete('cascade');
-            $table->string('image')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

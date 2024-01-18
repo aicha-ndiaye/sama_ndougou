@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Post;
+use App\Models\Produit;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,10 +12,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categorie_blog', function (Blueprint $table) {
+        Schema::create('categorie_produits', function (Blueprint $table) {
             $table->id();
             $table->string('nomCategorie');
-            $table->foreignIdFor(Post::class)->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categorie_blog');
+        Schema::dropIfExists('categorieProduirs');
     }
 };

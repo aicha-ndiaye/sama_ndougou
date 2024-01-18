@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Livraison extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+    public function livreur()
+    {
+        return $this->belongsTo(Livreur::class);
+    }
 }

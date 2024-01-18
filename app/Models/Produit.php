@@ -8,4 +8,24 @@ use Illuminate\Database\Eloquent\Model;
 class Produit extends Model
 {
     use HasFactory;
+    protected $guarded = [];
+
+        public function commande()
+        {
+            return $this->belongsToMany(Commande::class, 'detailCommande');
+        }
+        public function user()
+        {
+            return $this->belongsTo(user::class);
+        }
+        public function categorie()
+        {
+            return $this->belongsTo(categorie::class);
+        }
+        public function panier()
+        {
+            return $this->belongsTo(panier::class);
+        }
+
+
 }

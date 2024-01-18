@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Panier;
 use Illuminate\Http\Request;
 
 class PanierController extends Controller
@@ -9,10 +10,21 @@ class PanierController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function indexPanier()
+{
+    $panier = Panier::find(request()->id);
+
+    if (!$panier) {
+        return response()->json(['message' => 'Panier introuvable'], 404);
     }
+
+    $produits = $panier->produits;
+
+    $idProduits = $produits->pluck('id');
+
+    return response()->json($idProduits, 200);
+}
+
 
     /**
      * Show the form for creating a new resource.

@@ -2,10 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CategorieBlog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class categorieBlogController extends Controller
 {
+
+    public function createCategorieblog(Request $request)
+    {
+        $user = auth()->user();
+
+        // Vérifie si l'utilisateur est connecté
+        if ($user) {
+            // Vérifie si son rôle est égal à 1 (admin)
+            if ($user->role_id == 1){
+                $validator = Validator::make($request->all(), [
+                    'nomCategorie' => 'required|string',
+                ]);
+
+                if ($validator->fails()) {
+                    return response()->json(['errors' => $validator->errors()], 422);
+                }
+
+                $categorieProduits = CategorieBlog::create([
+                    'nomCategorie' => $request->nomCategorie,
+                ]);
+
+                return response()->json(['message' => 'categorie ajoutée avec succès', 'categorieProduits' => $categorieProduits], 201);
+            }
+
+            // Si l'utilisateur n'est pas admin, renvoie une réponse non autorisée
+            return response()->json(['message' => 'Non autorisé'], 401);
+        }
+    }
+
+
+
+
     /**
      * Display a listing of the resource.
      */
