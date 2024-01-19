@@ -20,7 +20,7 @@ class Produit extends Model
         }
         public function categorie()
         {
-            return $this->belongsTo(categorie::class);
+            return $this->belongsTo(categorieProduit::class);
         }
         public function panier()
         {

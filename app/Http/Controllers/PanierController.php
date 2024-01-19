@@ -3,36 +3,65 @@
 namespace App\Http\Controllers;
 
 use App\Models\Panier;
+use App\Models\Produit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PanierController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function indexPanier()
-{
-    $panier = Panier::find(request()->id);
 
-    if (!$panier) {
-        return response()->json(['message' => 'Panier introuvable'], 404);
+
+    public function ajouterAuPanier(Request $request)
+    {
+        // Obtenez l'utilisateur connecté
+        $user = Auth::guard('api')->user();
+
+        // Vérifiez si l'utilisateur est authentifié
+        if ($user) {
+            // Obtenez le nom et le prénom de l'utilisateur connecté
+            $usernom = $user->nom;
+            $userprenom = $user->prenom;
+
+            // Créez un nouvel objet Panier
+            $panier = new Panier([
+                'user_id' => $user->id,
+                'produit_id' => $request->produit_id,
+                'quantite' => $request->quantite,
+            ]);
+
+            // Enregistrez le panier
+            $panier->save();
+
+            // Obtenez les détails du produit ajouté
+            $nomProduit = $panier->produit->nomProduit;
+
+            // Retournez une réponse JSON avec les détails de la commande
+            return response()->json([
+                'message' => 'Produit ajouté au panier avec succès',
+                'commande' => [
+                    'user' => $userprenom,
+                    'prenom' => $usernom,
+                    'produit' => $nomProduit,
+                    'quantite' => $request->quantite,
+                ]
+            ], 201);
+        } else {
+            // Utilisateur non authentifié
+            return response()->json(['message' => 'Non autorisé'], 401);
+        }
     }
 
-    $produits = $panier->produits;
 
-    $idProduits = $produits->pluck('id');
 
-    return response()->json($idProduits, 200);
+
+public function indexPanier()
+{
+    $user = auth()->user();
+    $panier = Panier::where('user_id', $user->id)->with('produit')->get();
+
+    return response()->json(['panier' => $panier]);
 }
 
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.

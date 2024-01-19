@@ -9,13 +9,16 @@ class Commande extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    public function produit()
-    {
-        return $this->belongsToMany(Produit::class, 'detailCommande');
 
-    }
     public function livreur()
     {
         return $this->belongsTo(livreur::class);
+    }
+
+
+    public function produits()
+    {
+        return $this->belongsToMany(Produit::class, 'detail_produits')
+            ->withPivot('quantite');
     }
 }

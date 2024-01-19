@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\categorieBlogController;
 use App\Http\Controllers\CategorieController;
+use App\Http\Controllers\CommandeController;
+use App\Http\Controllers\detailpoduitController;
 use App\Http\Controllers\PanierController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProduitController;
@@ -39,6 +41,9 @@ Route::get('/index', [ProduitController::class, 'index']);
 Route::get('/indexPanier', [PanierController::class, 'indexPanier']);
 Route::post('ajouterRole', [UserController::class, 'ajouterRole']);
 Route::get('/indexPost', [PostController::class, 'indexPost']);
+Route::post('/createCommande', [CommandeController::class, 'createCommande']);
+Route::post('/ProduitsCommande/{id}', [detailpoduitController::class, 'ProduitsCommande']);
+Route::post('/ajoutProduitPanier', [PanierController::class, 'ajouterAuPanier']);
 
 Route::middleware(['auth:api', 'admin'])->group(function () {
 

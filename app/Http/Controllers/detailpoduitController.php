@@ -2,25 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Produit;
+use App\Models\Commande;
 use Illuminate\Http\Request;
 
-class DetailcommandeController extends Controller
+class detailpoduitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
+    public function ProduitsCommande($idCommande)
+{
+    $commande = Commande::findOrFail($idCommande);
+
+    $produits = $commande->produits;
+
+    return response()->json(['produits' => $produits]);
+}
+
 
     /**
      * Store a newly created resource in storage.

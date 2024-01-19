@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('commandes', function (Blueprint $table) {
             $table->id();
             $table->string('numeroCommande');
+            $table->string('dateCommande');
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->enum('statut',['enAttente','enCours','terminee'])->default('enAttente');
             $table->timestamps();
