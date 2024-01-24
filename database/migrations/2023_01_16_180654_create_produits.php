@@ -2,6 +2,7 @@
 
 use App\Models\Categorie;
 use App\Models\categorieProduit;
+use App\Models\Panier;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;

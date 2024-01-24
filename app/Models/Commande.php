@@ -21,4 +21,8 @@ class Commande extends Model
         return $this->belongsToMany(Produit::class, 'detail_produits')
             ->withPivot('quantite');
     }
+    public function panier()
+    {
+        return $this->belongsTo(Panier::class);
+    }
 }

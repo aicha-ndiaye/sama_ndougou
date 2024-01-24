@@ -128,7 +128,7 @@ class ProduitController extends Controller
                 $produit = Produit::find($id);
 
                 if (!$produit) {
-                    return response()->json(['message' => 'Ressource non trouvée'], 404);
+                    return response()->json(['message' => 'produit non trouvée'], 404);
                 }
 
                 $produit->delete();
@@ -151,13 +151,16 @@ class ProduitController extends Controller
         ], 200);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    
+    public function rechercheProduit(Request $request)
     {
-        //
+        $produit = Produit::findOrFail($request->id);
+        return response()->json([
+            "message"=>"Voici le produit que vous cherchez",
+            "produit"=>$produit
+            ], 200);
     }
+
 
     /**
      * Show the form for editing the specified resource.

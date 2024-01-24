@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Panier;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,6 +18,7 @@ return new class extends Migration
             $table->string('numeroCommande');
             $table->string('dateCommande');
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Panier::class)->constrained()->onDelete('cascade');
             $table->enum('statut',['enAttente','enCours','terminee'])->default('enAttente');
             $table->timestamps();
         });

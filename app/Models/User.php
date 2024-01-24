@@ -77,5 +77,9 @@ class User extends Authenticatable implements JWTSubject
     public function livreur(){
         return $this->hasOne(Livreur::class);
     }
+    public function panier()
+{
+    return $this->hasOne(Panier::class);
+}
 
 }

@@ -87,6 +87,8 @@ class PostController extends Controller
     }
         }}
 
+
+
         public function deletePost($id)
         {
             $user = auth()->user();
@@ -109,6 +111,16 @@ class PostController extends Controller
                 return response()->json(['message' => 'Vous devez être connecté pour effectuer cette action'], 401);
             }
         }
+
+        public function recherchePost(Request $request)
+        {
+            $post= Post::findOrFail($request->id);
+            return response()->json([
+                "message"=>"Voici le post que vous cherchez",
+                "produit"=>$post
+                ], 200);
+        }
+
 
     /**
      * Store a newly created resource in storage.
@@ -133,7 +145,6 @@ class PostController extends Controller
     {
         //
     }
-
 
 
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Livreur;
 use App\Models\Role;
 use App\Models\User;
+use App\Notifications\motDePasseOublie;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules;
 use Tymon\JWTAuth\Facades\JWTAuth;
@@ -33,8 +34,8 @@ class userController extends Controller
     public function inscriptionClient(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
-            'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z ]+$/'],
+            'nom' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z]+$/'],
+            'prenom' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z ]+$/'],
             'email' => ['required', 'email', 'unique:users,email'],
             'password' => Password::defaults(),
             'adresse' => ['required', 'string', 'regex:/^[a-zA-Z0-9 ]+$/'],
@@ -62,9 +63,8 @@ class userController extends Controller
             'image' => $imagePath,
             'role_id' => $roleClient->id,
         ]);
-        // $user->roles()->attach($roleClient);
 
-        return response()->json(['message' => 'client ajouté avec succès'], 201);
+        return response()->json(['message' => 'client ajouté avec succès',$user], 201);
     }
 
 
@@ -72,7 +72,7 @@ class userController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nom' => 'required|string|min:2|regex:/^[a-zA-Z]+$/',
-            'prenom' => 'required|string|min:4|regex:/^[a-zA-Z ]+$/',
+            'prenom' => 'required|string|min:2|regex:/^[a-zA-Z ]+$/',
             'email' => 'required|email|unique:users,email',
             'password' => Rules\Password::defaults(),
             'adresse' => 'required|string|regex:/^[a-zA-Z0-9 ]+$/',
@@ -111,43 +111,7 @@ class userController extends Controller
         return response()->json(['message' => 'livreur ajouté avec succès','user'=>$livreur], 201);
     }
 
-    public function inscriptionAdmin(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'nom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z]+$/'],
-            'prenom' => ['required', 'string', 'min:4', 'regex:/^[a-zA-Z ]+$/'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => Password::defaults(),
-            'adresse' => ['required', 'string', 'regex:/^[a-zA-Z0-9 ]+$/'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-        $imagePath = null;
-
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('images', $imageName, 'public');
-        }
-
-        $roleAdmin = Role::where('nomRole', 'admin')->first();
-
-        $user = User::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'adresse' => $request->adresse,
-            'image' => $imagePath,
-            'role_id' => $roleAdmin->id,
-        ]);
-
-        // $user->roles()->attach($roleAdmin);
-
-        return response()->json(['message' => 'Admin ajouté avec succès'], 201);
-    }
+   
     public function login(Request $request)
     {
         // data validation
@@ -213,6 +177,106 @@ class userController extends Controller
             ], 404);
         }
     }
+
+
+    public function modifieProfileAdmin(Request $request)
+    {
+        $admin = auth()->user();
+
+        $validator = Validator::make($request->all(), [
+            'nom' => 'required|string',
+            'prenom' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $admin->id,
+            'password' => 'nullable|min:6',
+            'adresse' => 'required|string',
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $imagePath = $admin->image;
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $imagePath = $image->storeAs('images', $imageName, 'public');
+        }
+
+        $admin->update([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'email' => $request->email,
+            'password' => $request->password ? Hash::make($request->password) : $admin->password,
+            'adresse' => $request->adresse,
+            'image' => $imagePath,
+
+        ]);
+
+        return response()->json(['message' => 'Profil mis à jour avec succès'], 200);
+    }
+
+    public function modifierMotDePasse(Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'nouveau_password' => Rules\Password::defaults(),
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    // Vérifiez si l'utilisateur est authentifié
+    $user = Auth::guard('api')->user();
+
+    if (!$user) {
+        return response()->json(['message' => 'Utilisateur non authentifié'], 401);
+    }
+    // $userId = $user->id;
+
+    // Vérifiez que l'ancien mot de passe est correct
+    if (!Hash::check($request->ancien_password, $user->password)) {
+        return response()->json(['message' => 'Mot de passe actuel incorrect'], 401);
+    }
+
+    // Mettez à jour le mot de passe avec le nouveau
+    $user->password = Hash::make($request->nouveau_password);
+    $user->notify(new motDePasseOublie());
+
+    $user->save();
+
+    return response()->json(['message' => 'Mot de passe modifié avec succès'], 200);
+}
+
+
+
+
+public function resetPassword(Request $request, User $user)
+{
+    $validator = Validator::make($request->all(), [
+        'password' => ['required', Password::defaults()],
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
+    }
+
+    // Assurez-vous que l'utilisateur est le même que celui qui est authentifié
+    if (auth()->user()->id !== $user->id) {
+        return response()->json(['message' => 'Vous n\'avez pas les autorisations nécessaires'], 403);
+    }
+
+    // Mettez à jour le mot de passe avec le nouveau
+    $user->password = bcrypt($request->password);
+    $user->save();
+
+    return response()->json([
+        'status_code' => 200,
+        'status_message' => 'Votre mot de passe a été modifié',
+        'user' => $user,
+    ]);
+}
 
 
 
