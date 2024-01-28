@@ -26,7 +26,7 @@ class UserFactory extends Factory
         return [
             'nom' => 'ndiaye',
             'prenom' => 'aicha',
-            'email'=>'aicha8420@gmail.com',
+            'email'=>'aicha@gmail.com',
             'password'=>Hash::make('passer123'),
             'adresse'=>'liberte6',
             'role_id'=>1

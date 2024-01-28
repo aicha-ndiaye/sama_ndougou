@@ -54,8 +54,6 @@ class ProduitController extends Controller
                         'quantiteTotale' => $request->quantiteTotale,
                         'image' => $imagePath,
                         'description' => $request->description,
-                        // 'user_id' => $request->user_id,
-                        'categorie_produit_id' => $request->categorieProduit_id,
                     ]);
 
                     return response()->json(['message' => 'produit ajouté avec succée', 'produit' => $produit], 201);
@@ -78,6 +76,7 @@ class ProduitController extends Controller
                     'prix' => 'required|numeric',
                     'quantiteTotale' => 'required|integer',
                     'description' => 'required|string',
+                    'categorie_produit'=>'required|numeric',
                     'image' => ['image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
                 ]);
 
@@ -151,7 +150,7 @@ class ProduitController extends Controller
         ], 200);
     }
 
-    
+
     public function rechercheProduit(Request $request)
     {
         $produit = Produit::findOrFail($request->id);

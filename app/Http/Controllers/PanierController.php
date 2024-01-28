@@ -15,57 +15,56 @@ class PanierController extends Controller
     {
         $user = Auth::guard('api')->user();
 
-        if (!$user) {
-            return response()->json(['message' => 'Non autorisé'], 401);
-        }
-
-        if ($user->id == 2) {
-            return response()->json(['message' => 'Accès refusé seul un client peut ajouter au panier'], 403);
-        }
-
-        $request->validate([
-            'produit_id' => 'required|exists:produits,id',
-            'quantite' => 'required|integer|min:1',
-        ]);
-
-        $produit = Produit::find($request->produit_id);
-
-        if (!$produit || $produit->quantiteTotale <= 0) {
-            return response()->json(['message' => 'Produit non disponible'], 400);
-        }
-
-        // Vérifiez si le panier existe déjà pour l'utilisateur et le produit spécifiés
-        $panier = Panier::where('user_id', $user->id)
-            ->where('produit_id', $request->produit_id)
-            ->first();
-
-        if (!$panier) {
-            // Si le panier n'existe pas, créez-en un nouveau
-            $panier = Panier::create([
-                'user_id' => $user->id,
-                'produit_id' => $request->produit_id,
-                'quantite' => $request->quantite,
+        if ($user && $user->role_id == 2) {
+            $request->validate([
+                'produit_id' => 'required|exists:produits,id',
+                'quantite' => 'required|integer|min:1',
             ]);
+
+            $produit = Produit::find($request->produit_id);
+
+            if (!$produit || $produit->quantiteTotale <= 0) {
+                return response()->json(['message' => 'Produit non disponible'], 400);
+            }
+
+            // Vérifiez si le panier existe déjà pour l'utilisateur et le produit spécifiés
+            $panier = Panier::where('user_id', $user->id)
+                ->where('produit_id', $request->produit_id)
+                ->first();
+
+            if (!$panier) {
+                // Si le panier n'existe pas, créez-en un nouveau
+                $panier = Panier::create([
+                    'user_id' => $user->id,
+                    'produit_id' => $request->produit_id,
+                    'quantite' => $request->quantite,
+                    
+                ]);
+            } else {
+                // Si le panier existe déjà, mettez à jour la quantité du produit
+                $panier->quantite += $request->quantite;
+                $panier->save();
+            }
+
+            // Réduisez la quantité du produit dans le stock
+            $produit->quantiteTotale -= $panier->quantite;
+            $produit->save();
+
+            return response()->json([
+                'message' => 'Produit ajouté au panier avec succès',
+                'commande' => [
+                    'user' => $user->prenom,
+                    'prenom' => $user->nom,
+                    'produit' => $produit->nomProduit,
+                    'quantite' => $request->quantite,
+                ]
+            ], 201);
         } else {
-            // Si le panier existe déjà, mettez à jour la quantité du produit
-            $panier->quantite += $request->quantite;
-            $panier->save();
+            return response()->json(['message' => 'Accès refusé, seul un utilisateur avec role_id == 1 peut ajouter au panier'], 403);
         }
-
-        // Réduisez la quantité du produit dans le stock
-        $produit->quantiteTotale -= $panier->quantite;
-        $produit->save();
-
-        return response()->json([
-            'message' => 'Produit ajouté au panier avec succès',
-            'commande' => [
-                'user' => $user->prenom,
-                'prenom' => $user->nom,
-                'produit' => $produit->nomProduit,
-                'quantite' => $request->quantite,
-            ]
-        ], 201);
     }
+
+
 
 
 

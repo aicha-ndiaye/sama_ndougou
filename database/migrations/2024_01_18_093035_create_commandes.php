@@ -17,8 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('numeroCommande');
             $table->string('dateCommande');
+            $table->string('plus_de_detail_pour_la_commande')->nullable();
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(Panier::class)->constrained()->onDelete('cascade');
             $table->enum('statut',['enAttente','enCours','terminee'])->default('enAttente');
             $table->timestamps();
         });
