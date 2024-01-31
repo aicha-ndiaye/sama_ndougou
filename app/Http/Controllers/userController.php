@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\InscriptionClientRequest;
+use App\Http\Requests\InscriptionLivreurRequest;
 use App\Models\Livreur;
 use App\Models\Role;
 use App\Models\User;
@@ -31,21 +33,8 @@ class userController extends Controller
     }
 
 
-    public function inscriptionClient(Request $request)
+    public function inscriptionClient(InscriptionClientRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'nom' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z]+$/'],
-            'prenom' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z ]+$/'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => Password::defaults(),
-            'adresse' => ['required', 'string', 'regex:/^[a-zA-Z0-9 ]+$/'],
-            'telephone' => ['required', 'regex:/^7\d{8}$/'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
         $imagePath = null;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -68,50 +57,38 @@ class userController extends Controller
     }
 
 
-    public function inscriptionlivreur(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'nom' => 'required|string|min:2|regex:/^[a-zA-Z]+$/',
-            'prenom' => 'required|string|min:2|regex:/^[a-zA-Z ]+$/',
-            'email' => 'required|email|unique:users,email',
-            'password' => Rules\Password::defaults(),
-            'adresse' => 'required|string|regex:/^[a-zA-Z0-9 ]+$/',
-            'statut' => 'required|string',
-            'telephone' => ['required', 'regex:/^7\d{8}$/'],
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-        $imagePath = null;
+    public function inscriptionlivreur(InscriptionLivreurRequest $request)
+{
+    $imagePath = null;
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('images', $imageName, 'public');
-        }
-        $rolelivreur = Role::where('nomRole', 'livreur')->first();
-
-        $user = User::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'adresse' => $request->adresse,
-            'role_id' => $rolelivreur->id,
-            'telephone'=>$request->telephone,
-            'image' => $imagePath,
-        ]);
-
-        $livreur=$user->livreur()->create([
-            'statut' => $request->statut,
-        ]);
-
-        // $user->roles()->attach($rolelivreur);
-        return response()->json(['message' => 'livreur ajouté avec succès','user'=>$livreur], 201);
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $imagePath = $image->storeAs('images', $imageName, 'public');
     }
 
-   
+    $roleLivreur = Role::where('nomRole', 'livreur')->first();
+
+    $user = User::create([
+        'nom' => $request->nom,
+        'prenom' => $request->prenom,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'adresse' => $request->adresse,
+        'role_id' => $roleLivreur->id,
+        'telephone' => $request->telephone,
+        'image' => $imagePath,
+    ]);
+
+    $livreur = $user->livreur()->create([
+        'statut' => $request->statut ?? 'occupé',
+    ]);
+
+    return response()->json(['message' => 'Livreur ajouté avec succès', 'user' => $livreur], 201);
+}
+
+
+
     public function login(Request $request)
     {
         // data validation
@@ -187,7 +164,7 @@ class userController extends Controller
             'nom' => 'required|string',
             'prenom' => 'required|string',
             'email' => 'required|email|unique:users,email,' . $admin->id,
-            'password' => 'nullable|min:6',
+            'password' => 'required|min:6',
             'adresse' => 'required|string',
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
 

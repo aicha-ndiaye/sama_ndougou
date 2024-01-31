@@ -35,7 +35,7 @@ class gererCommande extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('bojour nous sommes ravis de recevoir votre commande.')
+                    ->line('bonjour nous sommes ravis de recevoir votre commande.')
                     ->line('le livreur vous contacterez pour la suite de votre commande .')
                     ->action('vous pouvez suivre votre colis depuis ici', url('/'))
                     ->line('merci de nous avoir fait confiance!');

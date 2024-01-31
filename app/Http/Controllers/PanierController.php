@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AjouterAuPanierRequest;
 use App\Models\Panier;
 use App\Models\Produit;
 use Illuminate\Http\Request;
@@ -11,20 +12,22 @@ use Illuminate\Support\Facades\DB;
 
 class PanierController extends Controller
 {
-    public function ajouterAuPanier(Request $request)
+    public function ajouterAuPanier(AjouterAuPanierRequest $request)
     {
+        // Obtenez l'utilisateur connecté
         $user = Auth::guard('api')->user();
 
+        // Vérifiez si l'utilisateur est authentifié et a le rôle approprié
         if ($user && $user->role_id == 2) {
-            $request->validate([
-                'produit_id' => 'required|exists:produits,id',
-                'quantite' => 'required|integer|min:1',
-            ]);
-
+            // Vérifiez si le produit existe
             $produit = Produit::find($request->produit_id);
+            if (!$produit) {
+                return response()->json(['message' => 'Produit non trouvé'], 404);
+            }
 
-            if (!$produit || $produit->quantiteTotale <= 0) {
-                return response()->json(['message' => 'Produit non disponible'], 400);
+            // Vérifiez si la quantité demandée est supérieure à la quantité disponible
+            if ($produit->quantiteTotale < $request->quantite) {
+                return response()->json(['message' => 'Quantité insuffisante'], 400);
             }
 
             // Vérifiez si le panier existe déjà pour l'utilisateur et le produit spécifiés
@@ -38,7 +41,6 @@ class PanierController extends Controller
                     'user_id' => $user->id,
                     'produit_id' => $request->produit_id,
                     'quantite' => $request->quantite,
-                    
                 ]);
             } else {
                 // Si le panier existe déjà, mettez à jour la quantité du produit
@@ -47,20 +49,16 @@ class PanierController extends Controller
             }
 
             // Réduisez la quantité du produit dans le stock
-            $produit->quantiteTotale -= $panier->quantite;
+            $produit->quantiteTotale -= $request->quantite;
             $produit->save();
 
+            // Retournez une réponse JSON avec un message de succès
             return response()->json([
                 'message' => 'Produit ajouté au panier avec succès',
-                'commande' => [
-                    'user' => $user->prenom,
-                    'prenom' => $user->nom,
-                    'produit' => $produit->nomProduit,
-                    'quantite' => $request->quantite,
-                ]
             ], 201);
         } else {
-            return response()->json(['message' => 'Accès refusé, seul un utilisateur avec role_id == 1 peut ajouter au panier'], 403);
+            // Utilisateur non autorisé (non authentifié ou rôle incorrect)
+            return response()->json(['message' => 'Accès refusé, seule un utilisateur avec role_id == 2 peut ajouter au panier'], 403);
         }
     }
 
@@ -80,13 +78,45 @@ class PanierController extends Controller
             ->with('produit')
             ->get();
 
-        // Retournez une réponse JSON avec les produits du panier
-        return response()->json(['produitsPanier' => $produitsPanier]);
+        // Calculez le montant total du panier
+        $montantTotal = 0;
+        $quantiteTotal=0;
+
+        foreach ($produitsPanier as $produitPanier) {
+            // ...
+
+            // Ajoutez le prix du produit multiplié par la quantité au montant total
+            $montantTotal += $produitPanier->produit->prix + $produitPanier->prix;
+            $quantiteTotal += $produitPanier->produit->quantite + $produitPanier->quantite;
+        }
+
+        // Retournez une réponse JSON avec les produits du panier et le montant total
+        return response()->json([
+            'produitsPanier' => $produitsPanier->map(function ($produitPanier) {
+                return [
+                    'id' => $produitPanier->id,
+                    'produit' => [
+                        'nom' => $produitPanier->produit->nomProduit,
+                        'prix' => $produitPanier->produit->prix,
+                        'quantite' => $produitPanier->quantite,
+
+                    ],
+
+                ];
+            }),
+            'quantiteTotal' => $quantiteTotal,
+            'montantTotal' => $montantTotal,
+
+        ]);
     } else {
         // Utilisateur non authentifié
         return response()->json(['message' => 'Non autorisé'], 401);
     }
 }
+
+
+
+
 
 
 

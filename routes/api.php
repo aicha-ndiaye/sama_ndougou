@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //ajouter un utilisateur 'client'
 Route::post('/inscriptionClient', [userController::class, 'inscriptionClient']);
 //ajouter un utilisateur 'livreur'
-Route::post('/inscriptionlivreur', [UserController::class, 'inscriptionlivreur']);
+
 // //ajouter un utilisateur 'admin'
 // Route::post('/inscriptionAdmin', [UserController::class, 'inscriptionAdmin']);
 //se connecter
@@ -44,10 +44,11 @@ Route::post('ajouterRole', [UserController::class, 'ajouterRole']);
 Route::get('/indexPost', [PostController::class, 'indexPost']);
 Route::post('/createCommande', [CommandeController::class, 'createCommande']);
 Route::post('/ProduitsCommande/{id}', [detailpoduitController::class, 'ProduitsCommande']);
+
 Route::post('/ajoutProduitPanier', [PanierController::class, 'ajouterAuPanier']);
-Route::post('/ajouterAuPanierVisiteur', [PanierController::class, 'ajouterAuPanierVisiteur']);
+
 Route::get('/afficherProduitsPanier', [PanierController::class, 'afficherProduitsPanier']);
-Route::get('/afficherPanierVisiteur', [PanierController::class, 'afficherPanierVisiteur']);
+
 Route::post('/createAvis', [avis_clienttController::class, 'createAvis']);
 Route::get('/indexAvis', [avis_clienttController::class, 'indexAvis']);
 Route::post('/updateAvis/{id}', [avis_clienttController::class, 'updateAvis']);
@@ -57,10 +58,11 @@ Route::delete('/deletePanier/{id}', [PanierController::class, 'deletePanier']);
 Route::post('/modifierMotDePasse', [userController::class, 'modifierMotDePasse']);
 Route::post('/resetPassword', [userController::class, 'resetPassword']);
 Route::get('/indexCommande', [CommandeController::class, 'indexCommande']);
-
+Route::get('/detailCommande/{id}', [detailpoduitController::class, 'detailCommande']);
 
 Route::middleware(['auth:api', 'admin'])->group(function () {
 
+    Route::post('/inscriptionlivreur', [UserController::class, 'inscriptionlivreur']);
     Route::post('/createCategorieProduits', [CategorieController::class, 'createCategorieProduits']);
     Route::post('/createProduit', [ProduitController::class, 'createProduit']);
     Route::post('/updateProduit/{id}', [ProduitController::class, 'updateProduit']);
@@ -70,6 +72,7 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::post('/updatePost/{id}', [PostController::class, 'updatePost']);
     Route::delete('/deletePost/{id}', [PostController::class, 'deletePost']);
     Route::post('/modifieProfileAdmin', [userController::class, 'modifieProfileAdmin']);
+    Route::delete('/deleteAvis/{id}', [avis_clienttController::class, 'deleteAvis']);
 
 
 

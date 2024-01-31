@@ -20,9 +20,59 @@
         }
     },
     "consumes": [
-        "application/json"
+        "multipart/form-data"
     ],
     "paths": {
+        "/api/indexCommande": {
+            "get": {
+                "summary": "indexCommande",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion commande"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
         "/api/createCommande": {
             "post": {
                 "summary": "creer commande",
@@ -36,10 +86,113 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
                     "gestion commande"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "adresse_de_livraison": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "adresse_de_livraison": "liberte6"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/deleteAvis/3": {
+            "delete": {
+                "summary": "delete avis",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion avis client"
                 ],
                 "parameters": [
                     {
@@ -68,6 +221,33 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
@@ -84,7 +264,24 @@
                         "name": "Authorization",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "contenu": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "contenu": "je ne suis pas satisfait"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/indexAvis": {
@@ -94,6 +291,24 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -127,10 +342,113 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
                     "gestion avis client"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "produit_id": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "produit_id": "1"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/deletePanier/7": {
+            "delete": {
+                "summary": "deletePanier",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion panier"
                 ],
                 "parameters": [
                     {
@@ -159,6 +477,33 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
@@ -175,7 +520,18 @@
                         "name": "Authorization",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {}
+                            },
+                            "example": {}
+                        }
+                    }
+                }
             }
         },
         "/api/ajoutProduitPanier": {
@@ -191,32 +547,27 @@
                                 "example": ""
                             }
                         }
-                    }
-                },
-                "tags": [
-                    "gestion panier"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
                     },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ]
-            }
-        },
-        "/api/ajouterAuPanierVisiteur": {
-            "post": {
-                "summary": "ajouterAuPanierVisiteur",
-                "description": "",
-                "responses": {
-                    "201": {
-                        "description": "Created successfully",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -239,7 +590,28 @@
                         "name": "Authorization",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "produit_id": {
+                                        "type": "string"
+                                    },
+                                    "quantite": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "produit_id": "2",
+                                "quantite": "2"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/afficherProduitsPanier": {
@@ -255,37 +627,18 @@
                                 "example": ""
                             }
                         }
-                    }
-                },
-                "tags": [
-                    "gestion panier"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
                     },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     },
-                    {
-                        "in": "header",
-                        "name": "",
-                        "type": "string"
-                    }
-                ]
-            }
-        },
-        "/api/afficherPanierVisiteur": {
-            "get": {
-                "summary": "afficherPanierVisiteur",
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "OK",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -316,6 +669,77 @@
                 ]
             }
         },
+        "/api/resetPassword": {
+            "post": {
+                "summary": "New Request",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion blog"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom": "sene"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/recherchePost/1": {
             "get": {
                 "summary": "recherche post",
@@ -323,6 +747,24 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -356,6 +798,33 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
@@ -372,7 +841,24 @@
                         "name": "Authorization",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nomCategorie": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nomCategorie": "astuce"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/deletePost/2": {
@@ -382,6 +868,33 @@
                 "responses": {
                     "204": {
                         "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -420,6 +933,24 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
@@ -452,6 +983,33 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
@@ -468,7 +1026,48 @@
                         "name": "Authorization",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nomPost": {
+                                        "type": "string"
+                                    },
+                                    "titrePost": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "datePost": {
+                                        "type": "string"
+                                    },
+                                    "categorie_blog_id": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nomPost": "mafe un plat aime",
+                                "titrePost": "dkfpojgh nk",
+                                "description": "yassa hbieune penda mbaye cuisiner par une saint louisienne",
+                                "image": {
+                                    "type": "string",
+                                    "format": "binary"
+                                },
+                                "datePost": "2024/07/04",
+                                "categorie_blog_id": "1"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/updatePost/1": {
@@ -484,6 +1083,33 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
@@ -500,7 +1126,48 @@
                         "name": "Authorization",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nomPost": {
+                                        "type": "string"
+                                    },
+                                    "titrePost": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "datePost": {
+                                        "type": "string"
+                                    },
+                                    "categorie_blog_id": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nomPost": "recette thiebou dieune bou neh",
+                                "titrePost": "thiebou dieunde penda mbaye bou fatt ",
+                                "description": "thiebou dieune penda mbaye cuisiner par une saint louisienne Aicha ndiaye",
+                                "image": {
+                                    "type": "string",
+                                    "format": "binary"
+                                },
+                                "datePost": "2024/07/04",
+                                "categorie_blog_id": "1"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/inscriptionClient": {
@@ -516,6 +1183,33 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
@@ -527,7 +1221,236 @@
                         "name": "User-Agent",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "prenom": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "adresse": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom": "sen",
+                                "prenom": "bicha",
+                                "email": "bichasen@gmail.com",
+                                "adresse": "liberte6",
+                                "telephone": "773400419",
+                                "image": "",
+                                "password": "passer123"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/modifierMotDePasse": {
+            "post": {
+                "summary": "modifierMotDePasse",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion authentification"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "ancien_password": {
+                                        "type": "string"
+                                    },
+                                    "nouveau_password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "password": "passer123",
+                                "ancien_password": "passer1234",
+                                "nouveau_password": "passer1234"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/modifieProfileAdmin": {
+            "post": {
+                "summary": "modifieProfileAdmin",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion authentification"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "prenom": {
+                                        "type": "string"
+                                    },
+                                    "adresse": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom": "aichouuu",
+                                "prenom": "diouf",
+                                "adresse": "liberte6",
+                                "telephone": "773400419",
+                                "email": "aicha@gmail.com",
+                                "password": "passer123",
+                                "image": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/ajouterRole": {
@@ -543,27 +1466,27 @@
                                 "example": ""
                             }
                         }
-                    }
-                },
-                "tags": [
-                    "gestion authentification"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    }
-                ]
-            }
-        },
-        "/api/inscriptionAdmin": {
-            "post": {
-                "summary": "inscription admin",
-                "description": "",
-                "responses": {
-                    "201": {
-                        "description": "Created successfully",
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -581,7 +1504,24 @@
                         "name": "User-Agent",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nomRole": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nomRole": "client"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/deconnect": {
@@ -597,6 +1537,33 @@
                                 "example": ""
                             }
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
                     }
                 },
                 "tags": [
@@ -608,7 +1575,28 @@
                         "name": "User-Agent",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "email": "aicha@gmail.Com",
+                                "password": "passer123"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/login": {
@@ -624,27 +1612,27 @@
                                 "example": ""
                             }
                         }
-                    }
-                },
-                "tags": [
-                    "gestion authentification"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    }
-                ]
-            }
-        },
-        "/api/inscriptionlivreur": {
-            "post": {
-                "summary": "inscription livreur",
-                "description": "",
-                "responses": {
-                    "201": {
-                        "description": "Created successfully",
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -662,7 +1650,136 @@
                         "name": "User-Agent",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "email": "bichasen@gmail.com",
+                                "password": "passer123"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/inscriptionlivreur": {
+            "post": {
+                "summary": "inscription livreur",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion authentification"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nom": {
+                                        "type": "string"
+                                    },
+                                    "prenom": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "adresse": {
+                                        "type": "string"
+                                    },
+                                    "telephone": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nom": "ba",
+                                "prenom": "magid",
+                                "email": "magid@gmail.com",
+                                "password": "passer123",
+                                "adresse": "medina",
+                                "telephone": "778754343",
+                                "image": {
+                                    "type": "string",
+                                    "format": "binary"
+                                },
+                                "": ""
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/rechercheProduit/1": {
@@ -672,6 +1789,24 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -689,16 +1824,54 @@
                         "name": "User-Agent",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {}
+                            },
+                            "example": {}
+                        }
+                    }
+                }
             }
         },
-        "/api/updateProduit/3": {
+        "/api/updateProduit/1": {
             "post": {
                 "summary": "update produit",
                 "description": "",
                 "responses": {
                     "201": {
                         "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -721,7 +1894,48 @@
                         "name": "Authorization",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nomProduit": {
+                                        "type": "string"
+                                    },
+                                    "prix": {
+                                        "type": "string"
+                                    },
+                                    "quantiteTotale": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "categorieProduit_id": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nomProduit": "piment",
+                                "prix": "200",
+                                "quantiteTotale": "10",
+                                "description": "kndk, nfjrifjeiohkn",
+                                "image": {
+                                    "type": "string",
+                                    "format": "binary"
+                                },
+                                "categorieProduit_id": "1"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/deleteProduit/3": {
@@ -731,6 +1945,33 @@
                 "responses": {
                     "204": {
                         "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -769,32 +2010,27 @@
                                 "example": ""
                             }
                         }
-                    }
-                },
-                "tags": [
-                    "gestion produit"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
                     },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ]
-            }
-        },
-        "/api/createCategorieProduits": {
-            "post": {
-                "summary": "ajouter categorie produit",
-                "description": "",
-                "responses": {
-                    "201": {
-                        "description": "Created successfully",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
                         "content": {
                             "application/json": {
                                 "schema": {},
@@ -817,7 +2053,124 @@
                         "name": "Authorization",
                         "type": "string"
                     }
-                ]
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nomProduit": {
+                                        "type": "string"
+                                    },
+                                    "prix": {
+                                        "type": "string"
+                                    },
+                                    "quantiteTotale": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "": {
+                                        "type": "string"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nomProduit": "citron",
+                                "prix": "100",
+                                "quantiteTotale": "400",
+                                "description": "ceci est un legume",
+                                "": "",
+                                "image": {
+                                    "type": "string",
+                                    "format": "binary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/createCategorieProduits": {
+            "post": {
+                "summary": "ajouter categorie produit",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion produit"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nomCategorie": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "nomCategorie": "pack"
+                            }
+                        }
+                    }
+                }
             }
         },
         "/api/index": {
@@ -827,6 +2180,24 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {},

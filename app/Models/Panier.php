@@ -20,7 +20,9 @@ class Panier extends Model
     return $this->hasMany(Commande::class, 'panier_id');
 }
 
-
+public function produits() {
+    return $this->belongsToMany(Produit::class, 'panier_produits')->withPivot('quantite');
+}
 
     public function produit()
     {

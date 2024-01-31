@@ -26,19 +26,6 @@ class PostController extends Controller
 
         if ($user) {
             if ($user->role_id == 1) {
-                $validator = Validator::make($request->all(), [
-                    'nomPost' => 'required',
-                    'titrePost' => 'required',
-                    'description' => 'required',
-                    'image' => 'required',
-                    'datePost' => 'required',
-                    'categorie_blog_id' => 'required|exists:categorie_blogs,id',
-                ]);
-
-                if ($validator->fails()) {
-                    return response()->json(['errors' => $validator->errors()], 422);
-                }
-
                 $post = new Post();
                 $post->nomPost = $request->nomPost;
                 $post->titrePost = $request->titrePost;

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('numeroCommande');
             $table->string('dateCommande');
             $table->string('plus_de_detail_pour_la_commande')->nullable();
+            $table->string('adresse_de_livraison');
             $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
             $table->enum('statut',['enAttente','enCours','terminee'])->default('enAttente');
             $table->timestamps();

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Commande;
+use App\Models\Produit;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,13 +15,11 @@ return new class extends Migration
     {
         Schema::create('detail_produits', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('commande_id');
-            $table->unsignedBigInteger('produit_id');
             $table->integer('nombre_produit');
             $table->integer('montant');
             $table->timestamps();
-            $table->foreign('commande_id')->references('id')->on('commandes')->onDelete('cascade');
-            $table->foreign('produit_id')->references('id')->on('produits')->onDelete('cascade');
+            $table->foreignIdFor(Commande::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Produit::class)->constrained()->onDelete('cascade');
         });
     }
 

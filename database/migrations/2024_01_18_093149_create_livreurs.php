@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('livreurs', function (Blueprint $table) {
             $table->id();
-            $table->enum('statut',['disponible','occupe']);
+            $table->enum('statut',['disponible','occupe'])->default('occupe');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
