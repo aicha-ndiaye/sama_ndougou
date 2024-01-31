@@ -606,8 +606,8 @@
                                 }
                             },
                             "example": {
-                                "produit_id": "2",
-                                "quantite": "2"
+                                "produit_id": "1",
+                                "quantite": "655"
                             }
                         }
                     }
@@ -2173,7 +2173,7 @@
                 }
             }
         },
-        "/api/index": {
+        "/api/indexProduit": {
             "get": {
                 "summary": "liste des produits",
                 "description": "",

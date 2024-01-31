@@ -38,7 +38,7 @@ Route::post('deconnect', [UserController::class, 'deconnect']);
 //verifier si un email existe
 Route::post('verifMail', [UserController::class, 'verifMail']);
 
-Route::get('/index', [ProduitController::class, 'index']);
+Route::get('/indexProduit', [ProduitController::class, 'indexProduit']);
 Route::get('/indexPanier', [PanierController::class, 'indexPanier']);
 Route::post('ajouterRole', [UserController::class, 'ajouterRole']);
 Route::get('/indexPost', [PostController::class, 'indexPost']);
