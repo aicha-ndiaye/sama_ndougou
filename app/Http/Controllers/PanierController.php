@@ -58,7 +58,7 @@ class PanierController extends Controller
             ], 201);
         } else {
             // Utilisateur non autorisé (non authentifié ou rôle incorrect)
-            return response()->json(['message' => 'Accès refusé, seule un utilisateur avec role_id == 2 peut ajouter au panier'], 403);
+            return response()->json(['message' => 'Accès refusé, seule un client peut ajouter au panier'], 403);
         }
     }
 

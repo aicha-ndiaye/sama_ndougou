@@ -15,8 +15,7 @@ return new class extends Migration
     {
         Schema::create('livraisons', function (Blueprint $table) {
             $table->id();
-            $table->string('avisClient');
-            $table->enum('statut',['enAttente','enCours','terminee'])->default('enAttente');
+            $table->enum('statut',['enAttente','enCours','terminee'])->default('enCours');
             $table->string('dateLivraison');
             $table->foreignIdFor(Commande::class)->constrained()->onDelete('cascade');
             $table->foreignIdFor(Livreur::class)->constrained()->onDelete('cascade');

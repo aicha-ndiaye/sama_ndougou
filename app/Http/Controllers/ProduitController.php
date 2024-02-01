@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateProduitRequest;
 use App\Http\Requests\updateProduitRequest;
+use App\Models\categorieProduit;
 use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -74,8 +75,7 @@ class ProduitController extends Controller
                 $imagePath = null;
                 if ($request->hasFile('image')) {
                     $image = $request->file('image');
-                    $imageName = time() . '.' . $image->getClientOriginalExtension();
-                    $imagePath = $image->storeAs('images', $imageName, 'public');
+                    $produit->image = $image->store('images', 'public');
                 }
 
                 // Calculer la différence de quantité
@@ -128,10 +128,17 @@ class ProduitController extends Controller
     {
         $produit = Produit::all();
         return response()->json([
-            "La listes de tous les produit "=>$produit
+            "ListeProduit"=>$produit
         ], 200);
     }
 
+    public function indexProduitCategorie()
+    {
+        $categorie = categorieProduit::all();
+        return response()->json([
+            "ListeCategorie"=>$categorie
+        ], 200);
+    }
 
     public function rechercheProduit(Request $request)
     {

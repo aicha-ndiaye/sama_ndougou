@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Panier;
+use App\Models\Livreur;
 use App\Models\Commande;
-use App\Models\detailProduit;
 use Illuminate\Http\Request;
+use App\Models\detailProduit;
+use App\Models\Livraison;
 use Illuminate\Support\Carbon;
 use App\Notifications\gererCommande;
 use Illuminate\Support\Facades\Auth;
@@ -41,77 +43,202 @@ class CommandeController extends Controller
 
 
     public function createCommande(Request $request)
+{
+    $user = Auth::guard('api')->user();
+    $panier = Panier::where('user_id', $user->id)->get();
+
+    if (count($panier) == 0) {
+        return response()->json(['status' => 404, 'status_message' => 'Le panier est vide ou n\'existe pas.']);
+    }
+
+    $commande = Commande::create([
+        'dateCommande' => now(),
+        'user_id' => $user->id,
+        'numeroCommande' => Commande::max('numeroCommande') + 1,
+        'adresse_de_livraison' => $request->adresse_de_livraison,
+    ]);
+
+    $montantTotal = 0;
+    $quantiteTotal = 0;
+
+    $produitsPanier = Panier::where('user_id', $user->id)->with('produit')->get();
+
+    foreach ($produitsPanier as $produit) {
+        $montantTotal += $produit->quantite * $produit->produit->prix;
+        $quantiteTotal += $produit->quantite;
+
+        DetailProduit::create([
+            'commande_id' => $commande->id,
+            'produit_id' => $produit->produit->id,
+            'montant' => $produit->quantite * $produit->produit->prix,
+            'nombre_produit' => $produit->quantite,
+        ]);
+
+        $produit->delete();
+    }
+
+    // Détachez les produits après les avoir ajoutés à la commande
+
+
+    return response()->json([
+        'status' => 200,
+        'status_message' => 'Commande créée avec succès',
+        'user' => [
+            'prenom' => $user->prenom,
+            'nom' => $user->nom,
+        ],
+        'commande' => [
+            'numeroCommande' => $commande->numeroCommande,
+            'adresse_de_livraison' => $commande->adresse_de_livraison,
+            'details' => DetailProduit::where('commande_id', $commande->id)->get(),
+        ],
+        'produits' => [
+            'montantTotal' => $montantTotal,
+            'quantiteTotal' => $quantiteTotal,
+        ],
+    ]);
+}
+
+
+    public function commandeEnCours(Request $request, $id)
+    {
+        if (auth()->check()) {
+            return response()->json(['message' => 'Non autorisé, vous devez vous connecter'], 401);
+        }
+
+        $user = Auth::guard('api')->user();
+
+        if ($user->role_id !== 1) {
+            return response()->json(['message' => 'Non autorisé. Seuls les administrateurs peuvent effectuer cette action.'], 403);
+        }
+
+        $commande = Commande::find($id);
+
+        if (!$commande) {
+            return response()->json(['message' => 'Commande non trouvée'], 404);
+        }
+
+        $commande->update(['statut' => 'enCours']);
+        // Si vous avez décommenté la ligne suivante, assurez-vous que la notification est correctement configurée
+        // $commande->notify(new CommandeEnCours());
+
+        return response()->json(['message' => 'Votre commande est en cours de livraison', 'commande' => $commande], 200);
+    }
+
+
+    public function commandeTerminee(Request $request, $id)
+    {
+        if (auth()->check()) {
+            return response()->json(['message' => 'Non autorisé, vous devez vous connecter'], 401);
+        }
+
+        $user = Auth::guard('api')->user();
+
+        if ($user->role_id !== 1) {
+            return response()->json(['message' => 'Non autorisé. Seuls les administrateurs peuvent effectuer cette action.'], 403);
+        }
+
+        $commande = Commande::find($id);
+
+        if (!$commande) {
+            return response()->json(['message' => 'Commande non trouvée'], 404);
+        }
+
+        $commande->update(['statut' => 'terminee']);
+        // Si vous avez décommenté la ligne suivante, assurez-vous que la notification est correctement configurée
+        // $commande->notify(new CommandeEnCours());
+
+        return response()->json(['message' => 'Votre commande a ete bien livre', 'commande' => $commande], 200);
+    }
+
+
+    public function listeCommandeEnAttente()
+    {
+        if (auth()->check()) {
+            return response()->json(['message' => 'Non autorisé, vous devez vous connecter'], 401);
+        }
+
+        $user = Auth::guard('api')->user();
+
+        if ($user->role_id != 1 && $user->role_id != 2) {
+            return response()->json(['message' => 'Non autorisé. Seuls les admins et les clients peuvent faire cette action.'], 403);
+        }
+
+        $commandesEnAttente = Commande::where('statut', 'EnAttente')->get();
+
+        if ($commandesEnAttente->isEmpty()) {
+            return response()->json(['message' => 'Aucune commande en attente trouvée'], 404);
+        }
+
+        return response()->json($commandesEnAttente, 200);
+    }
+
+
+    public function listeCommandeEnCours()
+    {
+        if (auth()->check()) {
+            return response()->json(['message' => 'Non autorisé, vous devez vous connecter'], 401);
+        }
+
+        $user = Auth::guard('api')->user();
+
+        if ($user->role_id != 1 && $user->role_id != 2) {
+            return response()->json(['message' => 'Non autorisé. Seuls les admins et les clients peuvent faire cette action.'], 403);
+        }
+
+        $commandesEnCours = Commande::where('statut', 'EnCours')->get();
+
+        if ($commandesEnCours->isEmpty()) {
+            return response()->json(['message' => 'Aucune commande en attente trouvée'], 404);
+        }
+
+        return response()->json($commandesEnCours, 200);
+    }
+
+
+    public function ListecommandeTerminee()
+    {
+        if (auth()->check()) {
+            return response()->json(['message' => 'Non autorisé, vous devez vous connecter'], 401);
+        }
+
+        $user = Auth::guard('api')->user();
+
+        // On autorise à la fois les utilisateurs et les administrateurs
+        if ($user->role_id != 1 && $user->role_id != 2) {
+            return response()->json(['message' => 'Non autorisé. Seuls les admins et les clients peuvent faire cette action.'], 403);
+        }
+
+        $commandesEnCours = Commande::where('statut', 'EnCours')->get();
+
+        if ($commandesEnCours->isEmpty()) {
+            return response()->json(['message' => 'Aucune commande en attente trouvée'], 404);
+        }
+
+        return response()->json($commandesEnCours, 200);
+    }
+
+
+    public function deleteCommande($id)
     {
         $user = Auth::guard('api')->user();
-        $panier = Panier::where('user_id', $user->id)->first();
 
-        if (!$panier) {
-            return response()->json(['status' => 404, 'status_message' => 'Le panier est vide ou n\'existe pas.']);
+        if ($user) {
+            if ($user->role_id != 2 && $user->role_id != 2) {
+                $commande = commande::find($id);
+
+                if (!$commande) {
+                    return response()->json(['message' => 'commande non trouvée'], 404);
+                }
+
+                $commande->delete();
+
+                return response()->json(['message' => 'commande supprimé avec succès'], 200);
+            } else {
+                return response()->json(['message' => 'Vous n\'êtes pas autorisé à effectuer cette action'], 401);
+            }
+        } else {
+            return response()->json(['message' => 'Vous devez être connecté pour effectuer cette action'], 401);
         }
-
-        $commande = Commande::create([
-            'dateCommande' => now(),
-            'user_id' => $user->id,
-            'numeroCommande' => Commande::max('numeroCommande') + 1,
-            'adresse_de_livraison' => $request->adresse_de_livraison,
-        ]);
-
-        $montantTotal = 0;
-        $quantiteTotal = 0;
-
-        $produitsPanier = Panier::where('user_id', $user->id)->with('produit')->get();
-
-        foreach ($produitsPanier as $produit) {
-            $montantTotal += $produit->quantite * $produit->produit->prix;
-            $quantiteTotal += $produit->quantite;
-
-            DetailProduit::create([
-                'commande_id' => $commande->id,
-                'produit_id' => $produit->produit->id,
-                'montant' => $produit->quantite * $produit->produit->prix,
-                'nombre_produit' => $produit->quantite,
-            ]);
-        }
-
-        // Détachez les produits après les avoir ajoutés à la commande
-        $panier->delete();
-
-        return response()->json([
-            'status' => 200,
-            'status_message' => 'Commande créée avec succès',
-            'user' => [
-                'prenom' => $user->prenom,
-                'nom' => $user->nom,
-            ],
-            'commande' => [
-                'numeroCommande' => $commande->numeroCommande,
-                'dateCommande' => $commande->dateCommande,
-                'adresse_de_livraison' => $commande->adresse_de_livraison,
-                'statut' => $commande->enAttente,
-                'produit_id' => $produit->produit->nomProduit,
-            ],
-            'produits' => [
-                'montantTotal' => $montantTotal,
-                'quantiteTotal' => $quantiteTotal,
-            ],
-        ]);
-    }
-
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

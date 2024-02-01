@@ -11,17 +11,16 @@ class Livreur extends Model
     use HasFactory;
 
     protected $guarded = [];
-    protected $fillables=[
-        'statut'
-    ];
+    protected $fillable = ['statut']; // Correction ici
 
     public function commande()
     {
         return $this->belongsTo(Commande::class);
     }
+
     public function livraison()
     {
-        return $this->belongsTo(livraison::class);
+        return $this->belongsTo(Livraison::class);
     }
 
     public function user()

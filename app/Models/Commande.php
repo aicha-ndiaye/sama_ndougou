@@ -9,6 +9,22 @@ class Commande extends Model
 {
     use HasFactory;
     protected $guarded = [];
+    
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($commande) {
+            $latestCommande = static::latest()->first();
+
+            if ($latestCommande) {
+                $commande->numeroCommande = $latestCommande->numeroCommande + 1;
+            } else {
+                $commande->numeroCommande = 1;
+            }
+        });
+    }
 
     public function livreur()
     {
