@@ -41,6 +41,30 @@ class ProduitTest extends TestCase
         $response->assertStatus(201);
     }
 
+    public function testupdateProduit()
+    {
+        // Créez un rôle (si nécessaire) ou utilisez un rôle existant
+        $role = Role::firstOrCreate(['nomRole' => 'admin']);
+
+        // Créez un utilisateur avec le rôle
+        $user = User::factory()->create(['role_id' => $role->id]);
+        $this->actingAs($user, 'api');
+
+        // Définissez les données du produit
+        $produitData = [
+            'nomProduit' => 'carottee',
+            'prix' => '300',
+            'quantiteTotale' => '200',
+            'description' => 'ceci est un legume',
+            'image' => UploadedFile::fake()->image('carotte.jpg'),
+        ];
+
+        // Effectuez une requête POST pour créer un produit
+        $response = $this->post('api/updateProduit/{id}', $produitData);
+
+        // Assurez-vous que la requête a réussi
+        $response->assertStatus(201);
+    }
 
 
 
@@ -50,7 +74,7 @@ class ProduitTest extends TestCase
         Produit::factory()->create();
 
         // Effectuez une requête GET pour lister les produits
-        $response = $this->get('api/index');
+        $response = $this->get('api/indexProduit');
 
         // Assurez-vous que la requête a réussi
         $response->assertStatus(200);

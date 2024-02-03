@@ -39,21 +39,31 @@ class categorieBlogController extends Controller
 
 
 
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function supprimerCategorieBlog($id)
     {
-        //
+
+        if (!auth()->check() || auth()->user()->role_id !==1 ) {
+            return response()->json(['message' => 'Non autorisé'], 401);
+        }
+
+
+        $categorieProduits = CategorieBlog::find($id);
+
+        if (!$categorieProduits) {
+            return response()->json(['message' => 'categorie non trouvé'], 404);
+        }
+
+        $categorieProduits->delete();
+
+        return response()->json(['message' => 'cateorie supprimer avec succé'], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function indexCategorieBlog()
     {
-        //
+        $categorie = CategorieBlog::all();
+        return response()->json([
+            "ListecategorieBlog"=>$categorie
+        ], 200);
     }
 
     /**

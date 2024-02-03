@@ -48,13 +48,23 @@ class CategorieController extends Controller
         }
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function supprimerCategorieProduit($id)
     {
-        //
+
+        if (!auth()->check() || auth()->user()->role_id !==1 ) {
+            return response()->json(['message' => 'Non autorisé'], 401);
+        }
+
+
+        $categorieProduits = categorieProduit::find($id);
+
+        if (!$categorieProduits) {
+            return response()->json(['message' => 'categorie non trouvé'], 404);
+        }
+
+        $categorieProduits->delete();
+
+        return response()->json(['message' => 'cateorie supprimer avec succé'], 200);
     }
 
     /**
@@ -81,11 +91,5 @@ class CategorieController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+
 }

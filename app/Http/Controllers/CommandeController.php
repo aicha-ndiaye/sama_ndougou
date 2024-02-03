@@ -6,21 +6,16 @@ use App\Models\User;
 use App\Models\Panier;
 use App\Models\Livreur;
 use App\Models\Commande;
+use App\Models\Livraison;
 use Illuminate\Http\Request;
 use App\Models\detailProduit;
-use App\Models\Livraison;
 use Illuminate\Support\Carbon;
 use App\Notifications\gererCommande;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\createCommandeRequest;
 
 class CommandeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-
-
-    // ...
 
     public function indexCommande()
     {
@@ -42,7 +37,7 @@ class CommandeController extends Controller
     }
 
 
-    public function createCommande(Request $request)
+    public function createCommande(createCommandeRequest $request)
 {
     $user = Auth::guard('api')->user();
     $panier = Panier::where('user_id', $user->id)->get();
@@ -51,10 +46,11 @@ class CommandeController extends Controller
         return response()->json(['status' => 404, 'status_message' => 'Le panier est vide ou n\'existe pas.']);
     }
 
+    try {
     $commande = Commande::create([
-        'dateCommande' => now(),
+        'dateCommande' => Carbon::now(),
         'user_id' => $user->id,
-        'numeroCommande' => Commande::max('numeroCommande') + 1,
+        'numeroCommande' => Commande::count() + 1,
         'adresse_de_livraison' => $request->adresse_de_livraison,
     ]);
 
@@ -73,12 +69,10 @@ class CommandeController extends Controller
             'montant' => $produit->quantite * $produit->produit->prix,
             'nombre_produit' => $produit->quantite,
         ]);
+        //   $commande->notify(new gererCommande());
 
         $produit->delete();
     }
-
-    // Détachez les produits après les avoir ajoutés à la commande
-
 
     return response()->json([
         'status' => 200,
@@ -97,6 +91,10 @@ class CommandeController extends Controller
             'quantiteTotal' => $quantiteTotal,
         ],
     ]);
+} catch (\Exception $e) {
+    // Gestion des exceptions
+    return response()->json(['status' => 500, 'status_message' => 'Une erreur est survenue lors de la création de la commande.']);
+}
 }
 
 
@@ -119,38 +117,11 @@ class CommandeController extends Controller
         }
 
         $commande->update(['statut' => 'enCours']);
-        // Si vous avez décommenté la ligne suivante, assurez-vous que la notification est correctement configurée
+
         // $commande->notify(new CommandeEnCours());
 
         return response()->json(['message' => 'Votre commande est en cours de livraison', 'commande' => $commande], 200);
     }
-
-
-    public function commandeTerminee(Request $request, $id)
-    {
-        if (auth()->check()) {
-            return response()->json(['message' => 'Non autorisé, vous devez vous connecter'], 401);
-        }
-
-        $user = Auth::guard('api')->user();
-
-        if ($user->role_id !== 1) {
-            return response()->json(['message' => 'Non autorisé. Seuls les administrateurs peuvent effectuer cette action.'], 403);
-        }
-
-        $commande = Commande::find($id);
-
-        if (!$commande) {
-            return response()->json(['message' => 'Commande non trouvée'], 404);
-        }
-
-        $commande->update(['statut' => 'terminee']);
-        // Si vous avez décommenté la ligne suivante, assurez-vous que la notification est correctement configurée
-        // $commande->notify(new CommandeEnCours());
-
-        return response()->json(['message' => 'Votre commande a ete bien livre', 'commande' => $commande], 200);
-    }
-
 
     public function listeCommandeEnAttente()
     {
@@ -172,7 +143,6 @@ class CommandeController extends Controller
 
         return response()->json($commandesEnAttente, 200);
     }
-
 
     public function listeCommandeEnCours()
     {

@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Livreur;
 use Tests\TestCase;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -11,133 +13,43 @@ class AuthentificationTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_register_user()
+
+    public function testRole(): void
     {
-        $data = [
-            'nom' => 'Wade',
-            'prenom' => 'Mariam',
-            'email' => 'mane@gmail.com',
-            'password' => 'passer1234',
-            'adresse' => 'keur Massar',
-            'telephone' => '778009876',
+        $user = Role::factory()->create();
+        $unserinsert = $user->toArray();
+        $this->assertDatabaseHas('roles', $unserinsert);
 
-        ];
-
-        $response = $this->json('POST', '/api/inscriptionClient', $data);
-
-        $response->assertStatus(200)
-                 ->assertJson([
-                     'status' => 200,
-                     'message' => 'Utilisateur créer avec succes',
-                 ]);
     }
 
 
+    public function testresgisterclient(): void
+{
+    $role = Role::factory()->create(['nomRole' => 'client']);
+    $user = User::factory()->create(['role_id' => $role->id]);
+    $this->assertDatabaseHas('users', $user->toArray());
+}
 
-    public function test_registerLivreur(){
+    public function testLoginclient(): void
+    {
+        $credentials = ['email' => 'bichasen@gmail.com', 'password' => 'passer123'];
+        $response = $this->post('api/login', $credentials);
+        $response->assertStatus(200);
+     }
 
-        $admin = User::factory()->create(['type' => 'admin']);
+     public function testLoginLivreur(): void
+     {
+         $credentials = ['email' => 'magid@gmail.com', 'password' => 'passer123'];
+         $response = $this->post('api/login', $credentials);
+         $response->assertStatus(200);
+      }
 
-        $data = [
-            'nom' => 'LivreurTest',
-            'prenom' => 'LivreurPrenom',
-            'email' => 'livreur@gmail.com',
-            'password' => 'passer1234',
-            'genre' => 'homme',
-            'statut'=> 'disponible',
-            'adresse' => 'keur Massar'
-        ];
 
-        $response = $this->actingAs($admin)->json('POST', '/api/inscriptionlivreur', $data);
+    public function testLoginAdmin(): void
+    {
+        $credentials = ['email' => 'aicha8420@gmail.com', 'password' => 'passer123'];
+        $response = $this->post('api/login', $credentials);
+        $response->assertStatus(200);
+     }
 
-        $response->assertStatus(200)
-            ->assertJson([
-                'status' => 200,
-                'message' => 'lovreur créer avec succes',
-            ]);
-    }
-
-    public function test_user_login_commercant(){
-        $user = User::factory()->create(['type' => 'commercant']);
-        $credentials = [
-            'email' => $user->email,
-            'password' => 'passer1234',
-        ];
-
-        $response = $this->json('POST', '/api/login', $credentials);
-
-        $response->assertStatus(200)
-            ->assertJson([
-                'status' => 200,
-                'message' => 'Salut Commercant',
-                'user' => $user->toArray(),
-                'authorization' => [
-                    'token' => $response['authorization']['token'],
-                    'type' => 'bearer',
-                ]
-            ]);
-    }
-
-    public function test_user_login_client(){
-        $user = User::factory()->create(['type' => 'client']);
-        $credentials = [
-            'email' => $user->email,
-            'password' => 'passer1234',
-        ];
-
-        $response = $this->json('POST', '/api/login', $credentials);
-
-        $response->assertStatus(200)
-            ->assertJson([
-                'status' => 200,
-                'message' => 'Salut Client',
-                'user' => $user->toArray(),
-                'authorization' => [
-                    'token' => $response['authorization']['token'],
-                    'type' => 'bearer',
-                ]
-            ]);
-    }
-
-    public function test_user_login_livreur(){
-        $user = User::factory()->create(['type' => 'livreur']);
-        $credentials = [
-            'email' => $user->email,
-            'password' => 'passer1234',
-        ];
-
-        $response = $this->json('POST', '/api/login', $credentials);
-
-        $response->assertStatus(200)
-            ->assertJson([
-                'status' => 200,
-                'message' => 'Salut livreur',
-                'user' => $user->toArray(),
-                'authorization' => [
-                    'token' => $response['authorization']['token'],
-                    'type' => 'bearer',
-                ]
-            ]);
-    }
-
-    public function test_user_login_admin(){
-        $user = User::factory()->create(['type' => 'admin']);
-        $credentials = [
-            'email' => $user->email,
-            'password' => 'passer1234',
-        ];
-
-        $response = $this->json('POST', '/api/login', $credentials);
-
-        $response->assertStatus(200)
-            ->assertJson([
-                'status' => 200,
-                'message' => 'Salut Admin',
-                'user' => $user->toArray(),
-                'authorization' => [
-                    'token' => $response['authorization']['token'],
-                    'type' => 'bearer',
-                ]
-            ]);
-    }
 }

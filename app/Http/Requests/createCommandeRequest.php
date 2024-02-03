@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
-class updateProduitRequest extends FormRequest
+class createCommandeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,10 @@ class updateProduitRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'adresse_de_livraison' => 'required|string|regex:/^[a-zA-Z]{3,}[0-9]*$/',
         ];
     }
+
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
@@ -41,17 +42,9 @@ class updateProduitRequest extends FormRequest
     public function messages()
     {
         return [
-            'nomProduit.required' => 'Le champ nom du produit est obligatoire.',
-            'prix.required' => 'Le champ prix est obligatoire.',
-            'prix.numeric' => 'Le champ prix doit être un nombre.',
-            'quantiteTotale.required' => 'Le champ quantité totale est obligatoire.',
-            'quantiteTotale.integer' => 'La quantité totale doit être un nombre entier.',
-            'description.required' => 'Le champ description est obligatoire.',
-            'description.string' => 'La description doit être une chaîne de caractères.',
-            'image.required' => 'Le champ image est obligatoire.',
-            'image.image' => 'Le fichier doit être une image.',
-            'image.mimes' => 'Le fichier doit être de type :values.',
-            'image.max' => 'Le fichier ne peut pas dépasser 2048 kilo-octets.',
+            'adresse_de_livraison.required' => 'Le champ adresse de livraison est obligatoire.',
+            'adresse_de_livraison.regex' => 'L\'adresse de livraison doit avoir  au moins 3 lettres.',
         ];
     }
+
 }

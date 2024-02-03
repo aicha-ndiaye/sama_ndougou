@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateProduitRequest;
 use App\Http\Requests\updateProduitRequest;
-use App\Models\categorieProduit;
+use App\Models\CategorieProduit;
 use App\Models\Produit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -75,16 +75,17 @@ class ProduitController extends Controller
                 $imagePath = null;
                 if ($request->hasFile('image')) {
                     $image = $request->file('image');
-                    $produit->image = $image->store('images', 'public');
+                $imageName = time().'.'.$image->getClientOriginalExtension();
+                $imagePath = $image->storeAs('images', $imageName, 'public');
                 }
 
-                // Calculer la différence de quantité
+                // Calculons la différence de quantité
                 $quantiteDifference = $request->quantiteTotale - $produit->quantiteTotale;
 
-                // Mettre à jour la quantité
+                // Mettons à jour la quantité
                 $produit->quantiteTotale = $request->quantiteTotale;
 
-                // Mettre à jour les autres champs
+                // Mettons à jour les autres champs
                 $produit->nomProduit = $request->nomProduit;
                 $produit->prix = $request->prix;
                 $produit->image = $imagePath;
@@ -134,7 +135,7 @@ class ProduitController extends Controller
 
     public function indexProduitCategorie()
     {
-        $categorie = categorieProduit::all();
+        $categorie = CategorieProduit::all();
         return response()->json([
             "ListeCategorie"=>$categorie
         ], 200);
@@ -147,15 +148,6 @@ class ProduitController extends Controller
             "message"=>"Voici le produit que vous cherchez",
             "produit"=>$produit
             ], 200);
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
     }
 
 }

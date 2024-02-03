@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -23,14 +24,16 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $role = Role::factory()->create(['nomRole' => 'admin']);
         return [
-            'nom' => 'ndiaye',
-            'prenom' => 'aicha',
-            'email'=>'aicha@gmail.com',
-            'password'=>Hash::make('passer123'),
-            'adresse'=>'liberte6',
-            'role_id'=>1
+            'nom' => $this->faker->lastName,
+            'prenom' => $this->faker->firstName,
+            'email' => $this->faker->unique()->safeEmail,
+            'password' => Hash::make($this->faker->password), // Génère un mot de passe aléatoire
+            'adresse' => $this->faker->address,
+            'role_id' => $role->id,
         ];
+
     }
 
     /**
