@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CommandeEnCours extends Notification
+class nouvelleCommande extends Notification
 {
     use Queueable;
 
@@ -29,13 +29,15 @@ class CommandeEnCours extends Notification
         return ['mail'];
     }
 
+    /**
+     * Get the mail representation of the notification.
+     */
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('bonjour nous sommes ravis de recevoir votre commande.')
-                    ->line('votre commande est en cours de livraison.')
-                    ->action('vous pouvez suivre votre colis depuis ici', url('/'))
-                    ->line('merci de nous avoir fait confiance!');
+                    ->line('vous avez une nouvelle commande.')
+                    ->action('Notification Action', url('/'))
+                    ->line('Thank you for using our application!');
     }
 
     /**

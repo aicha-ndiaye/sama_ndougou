@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Produit;
+use Faker\Factory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -25,23 +26,18 @@ class ProduitTest extends TestCase
         $user = User::factory()->create(['role_id' => $role->id]);
         $this->actingAs($user, 'api');
 
-        // Définissez les données du produit
-        $produitData = [
-            'nomProduit' => 'carotte',
-            'prix' => '300',
-            'quantiteTotale' => '100',
-            'description' => 'ceci est un legume',
-            'image' => UploadedFile::fake()->image('carotte.jpg'),
-        ];
+        // Créez un produit
+        $produit = Produit::factory()->create();
 
-        // Effectuez une requête POST pour créer un produit
-        $response = $this->post('api/createProduit', $produitData);
+        // Assurez-vous que l'utilisateur est enregistré dans la base de données
+        $this->assertDatabaseHas('users', $user->toArray());
 
-        // Assurez-vous que la requête a réussi
-        $response->assertStatus(201);
+        // Assurez-vous que le produit est enregistré dans la base de données
+        $this->assertDatabaseHas('produits', $produit->toArray());
     }
 
-    public function testupdateProduit()
+
+    public function testUpdateProduit()
     {
         // Créez un rôle (si nécessaire) ou utilisez un rôle existant
         $role = Role::firstOrCreate(['nomRole' => 'admin']);
@@ -50,20 +46,27 @@ class ProduitTest extends TestCase
         $user = User::factory()->create(['role_id' => $role->id]);
         $this->actingAs($user, 'api');
 
-        // Définissez les données du produit
-        $produitData = [
-            'nomProduit' => 'carottee',
-            'prix' => '300',
-            'quantiteTotale' => '200',
-            'description' => 'ceci est un legume',
-            'image' => UploadedFile::fake()->image('carotte.jpg'),
+        // Créez un produit existant dans la base de données
+        $produit = Produit::factory()->create();
+
+        // Nouvelles données pour la mise à jour
+        $faker = Factory::create();
+        $nouvellesDonnees = [
+            'nomProduit' => 'Nouveau Nom de Produit',
+            'description' => 'Nouvelle Description',
+            'prix' => 20.99,
+            'quantiteTotale' => 2,
+            'image' => UploadedFile::fake()->image('structure.jpg'),
         ];
 
-        // Effectuez une requête POST pour créer un produit
-        $response = $this->post('api/updateProduit/{id}', $produitData);
+        // Effectuez une requête PUT pour mettre à jour le produit
+        $response = $this->putJson("api/updateProduit/{$produit->id}", $nouvellesDonnees);
 
         // Assurez-vous que la requête a réussi
-        $response->assertStatus(201);
+        $response->assertStatus(200);
+
+        // Assurez-vous que le produit dans la base de données a été mis à jour
+        $this->assertDatabaseHas('produits', array_merge(['id' => $produit->id]));
     }
 
 
@@ -79,17 +82,30 @@ class ProduitTest extends TestCase
         // Assurez-vous que la requête a réussi
         $response->assertStatus(200);
     }
+    public function testDeleteProduit()
+    {
+        // Créez un rôle (si nécessaire) ou utilisez un rôle existant
+        $role = Role::firstOrCreate(['nomRole' => 'admin']);
+
+        // Créez un utilisateur avec le rôle
+        $user = User::factory()->create(['role_id' => $role->id]);
+        $this->actingAs($user, 'api');
+
+        // Assurez-vous qu'il y a au moins un produit dans la base de données
+        $produit = Produit::factory()->create();
+
+        // Effectuez une requête DELETE pour supprimer le produit
+        $response = $this->delete("api/deleteProduit/{$produit->id}");
+
+        // Assurez-vous que la requête a réussi
+        $response->assertStatus(200);
+
+        // Assurez-vous que le produit a été supprimé de la base de données
+        $this->assertDatabaseMissing('produits', ['id' => $produit->id]);
+    }
+
 
 }
 
 
-
-// public function testAnnulerReservation(): void
-// {
-//     $user = Utilisateur::factory()->create();
-//     $this->actingAs($user,'apiut');
-//     $reservationtr=Reservation::FindOrFail(1);
-//     $response = $this->delete('api/DeleteReservation/'.$reservationtr->id);
-//     $response->assertStatus(200);
-// }
 

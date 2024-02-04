@@ -6,32 +6,27 @@ use Tests\TestCase;
 use App\Models\Role;
 use App\Models\User;
 use Database\Factories\CategorieProduitFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategorieProduitTest extends TestCase
 {
-    public function testCreerCategorie()
-{
-    // Créez un rôle (si nécessaire) ou utilisez un rôle existant
-    $role = Role::firstOrCreate(['nomRole' => 'admin']);
+    use RefreshDatabase;
 
-    // Utilisez une adresse e-mail unique à chaque exécution du test
-    $email = 'aicha' . uniqid() . '@gmail.com';
+    public function testCreerCategorieProduit()
+    {
+        $role = Role::firstOrCreate(['nomRole' => 'admin']);
+        $user = User::factory()->create(['role_id' => $role->id]);
+        $this->actingAs($user, 'api');
 
-    // Créez un utilisateur avec le rôle et l'adresse e-mail unique
-    $user = User::factory()->create(['role_id' => $role->id, 'email' => $email]);
-
-    $this->actingAs($user, 'api');
-
-    // Générez dynamiquement les données de la catégorie de produit en utilisant la factory
-    $categorieData = CategorieProduitFactory::factory()->make()->toArray();
-    
-
-    // Effectuez une requête POST pour créer une catégorie de produit
-    $response = $this->postJson('api/createCategorieProduits', $categorieData);
-
-    // Assurez-vous que la requête a réussi
-    $response->assertStatus(201);
-}
+        // Effectuez une requête POST pour créer une catégorie de blog
+        $response = $this->postJson('api/createCategorieProduits', [
+            'nomCategorie' => 'Nom de la catégorie'
+        ]);
+        $response->assertStatus(201);
+        $this->assertDatabaseHas('categorie_produits', [
+            'nomCategorie' => 'Nom de la catégorie',
+        ]);
+    }
 
 
 

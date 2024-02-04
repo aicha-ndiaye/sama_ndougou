@@ -6,8 +6,10 @@ use App\Models\Livreur;
 use App\Models\Commande;
 use App\Models\Livraison;
 use Illuminate\Http\Request;
+use App\Notifications\gererCommande;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\changerStatutRequest;
+use App\Notifications\nouvelleCommande;
 
 class LivreurController extends Controller
 {
@@ -81,6 +83,8 @@ class LivreurController extends Controller
             'commande_id' => $commande->id,
             'dateLivraison' => now(),
         ]);
+ // Notifiez le livreur de la nouvelle commande
+        $livreurDisponible->user->notify(new nouvelleCommande());
 
         // Sauvegardez la livraison
         $livraison->save();

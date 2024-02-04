@@ -14,7 +14,7 @@ class CategorieBlogFactory extends Factory
     {
         return [
             'nomCategorie' => $this->faker->word(),
-            // Autres attributs de votre modèle ici
+          
         ];
     }
 }

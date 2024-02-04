@@ -12,6 +12,7 @@ use App\Models\detailProduit;
 use Illuminate\Support\Carbon;
 use App\Notifications\gererCommande;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\CommandeEnCours;
 use App\Http\Requests\createCommandeRequest;
 
 class CommandeController extends Controller
@@ -69,7 +70,8 @@ class CommandeController extends Controller
             'montant' => $produit->quantite * $produit->produit->prix,
             'nombre_produit' => $produit->quantite,
         ]);
-        //   $commande->notify(new gererCommande());
+      $user=User::where('id',$commande->user_id)->first();
+        $user->notify(new gererCommande());
 
         $produit->delete();
     }
@@ -100,6 +102,7 @@ class CommandeController extends Controller
 
     public function commandeEnCours(Request $request, $id)
     {
+
         if (auth()->check()) {
             return response()->json(['message' => 'Non autorisé, vous devez vous connecter'], 401);
         }
@@ -118,7 +121,7 @@ class CommandeController extends Controller
 
         $commande->update(['statut' => 'enCours']);
 
-        // $commande->notify(new CommandeEnCours());
+        $commande->$user->notify(new gererCommande());
 
         return response()->json(['message' => 'Votre commande est en cours de livraison', 'commande' => $commande], 200);
     }

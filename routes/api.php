@@ -47,7 +47,6 @@ Route::post('ajouterRole', [UserController::class, 'ajouterRole']);
 Route::get('/indexPost', [PostController::class, 'indexPost']);
 
 Route::get('/commandeEnCours/{id}', [CommandeController::class, 'commandeEnCours']);
-Route::get('/commandeTerminee/{id}', [CommandeController::class, 'commandeTerminee']);
 Route::get('/listeCommandeEnAttente', [CommandeController::class, 'listeCommandeEnAttente']);
 Route::get('/listeCommandeEnCours', [CommandeController::class, 'listeCommandeEnCours']);
 Route::get('/ListecommandeTerminee', [CommandeController::class, 'ListecommandeTerminee']);
@@ -62,9 +61,11 @@ Route::post('/changerStatut', [LivreurController::class, 'changerStatut']);
 Route::middleware(['auth:api', 'admin'])->group(function () {
 
     Route::post('/inscriptionlivreur', [UserController::class, 'inscriptionlivreur']);
+    Route::get('/listerClients', [userController::class, 'listerClients']);
+    Route::get('/listerLivreur', [userController::class, 'listerLivreur']);
     Route::post('/createCategorieProduits', [CategorieController::class, 'createCategorieProduits']);
     Route::post('/createProduit', [ProduitController::class, 'createProduit']);
-    Route::post('/updateProduit/{id}', [ProduitController::class, 'updateProduit']);
+    Route::put('/updateProduit/{id}', [ProduitController::class, 'updateProduit']);
     Route::delete('/deleteProduit/{id}', [ProduitController::class, 'deleteProduit']);
     Route::post('/createCategorieBlog', [categorieBlogController::class, 'createCategorieBlog']);
     Route::post('/createPost', [PostController::class, 'createPost']);
@@ -78,29 +79,24 @@ Route::middleware(['auth:api', 'admin'])->group(function () {
     Route::delete('/supprimerCategorieProduit/{id}', [CategorieController::class, 'supprimerCategorieProduit']);
     Route::delete('/supprimerCategorieBlog{id}', [categorieBlogController::class, 'supprimerCategorieBlog']);
     Route::get('/indexCategorieBlog', [categorieBlogController::class, 'indexCategorieBlog']);
-
 });
 
 
 Route::middleware(['auth:api', 'client'])->group(function () {
-// lister panier
-Route::get('/indexPanier', [PanierController::class, 'indexPanier']);
-//cree une commande
-Route::post('/createCommande', [CommandeController::class, 'createCommande']);
-Route::post('/ajouterAuPanier', [PanierController::class, 'ajouterAuPanier']);
-Route::get('/afficherProduitsPanier', [PanierController::class, 'afficherProduitsPanier']);
-Route::post('/createAvis', [avis_clienttController::class, 'createAvis']);
-Route::post('/updateAvis/{id}', [avis_clienttController::class, 'updateAvis']);
-Route::delete('/deletePanier/{id}', [PanierController::class, 'deletePanier']);
-Route::get('/indexCommande', [CommandeController::class, 'indexCommande']);
-Route::get('/detailCommande/{id}', [detailpoduitController::class, 'detailCommande']);
-Route::delete('/deleteCommande/{id}', [CommandeController::class, 'deleteCommande']);
-
+    // lister panier
+    Route::get('/indexPanier', [PanierController::class, 'indexPanier']);
+    //cree une commande
+    Route::post('/createCommande', [CommandeController::class, 'createCommande']);
+    Route::post('/ajouterAuPanier', [PanierController::class, 'ajouterAuPanier']);
+    Route::get('/afficherProduitsPanier', [PanierController::class, 'afficherProduitsPanier']);
+    Route::post('/createAvis', [avis_clienttController::class, 'createAvis']);
+    Route::post('/updateAvis/{id}', [avis_clienttController::class, 'updateAvis']);
+    Route::delete('/deletePanier/{id}', [PanierController::class, 'deletePanier']);
+    Route::get('/indexCommande', [CommandeController::class, 'indexCommande']);
+    Route::get('/detailCommande/{id}', [detailpoduitController::class, 'detailCommande']);
+    Route::delete('/deleteCommande/{id}', [CommandeController::class, 'deleteCommande']);
 });
 Route::middleware(['auth:api', 'livreur'])->group(function () {
-Route::post('/changerStatut', [LivreurController::class, 'changerStatut']);
-Route::post('/CommandeTerminee/{commande}', [LivreurController::class, 'CommandeTerminee']);
+    Route::post('/changerStatut', [LivreurController::class, 'changerStatut']);
+    Route::post('/CommandeTerminee/{commande}', [LivreurController::class, 'CommandeTerminee']);
 });
-
-
-

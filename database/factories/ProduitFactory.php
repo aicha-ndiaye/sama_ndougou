@@ -12,13 +12,15 @@ class ProduitFactory extends Factory
 
     public function definition()
     {
-        return [
+         return [
             'nomProduit' => $this->faker->word(),
             'prix' => $this->faker->randomFloat(2, 10, 100),
             'quantiteTotale' => $this->faker->numberBetween(10, 50),
             'description' => $this->faker->sentence(),
-            'image' => 'default.jpg',
+            'image' => $this->faker->imageUrl(),
         ];
+
+
     }
 }
 

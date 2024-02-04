@@ -32,7 +32,6 @@ class userController extends Controller
         return response()->json(['message' => 'Rôle ajouté avec succès', 'role' => $role], 201);
     }
 
-
     public function inscriptionClient(InscriptionClientRequest $request)
     {
         $imagePath = null;
@@ -86,8 +85,6 @@ class userController extends Controller
 
     return response()->json(['message' => 'Livreur ajouté avec succès', 'user' => $livreur], 201);
 }
-
-
 
     public function login(Request $request)
     {
@@ -257,21 +254,23 @@ public function resetPassword(Request $request, User $user)
 
 
 
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+public function listerClients()
+{
+    // Utilisez Eloquent pour obtenir les utilisateurs avec le rôle spécifié (role_id == 1 pour le rôle "client")
+    $users = User::where('role_id', 2)->get();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    // Retournez la liste des utilisateurs
+    return $users;
+}
+
+public function listerLivreur()
+{
+    // Utilisez Eloquent pour obtenir les utilisateurs avec le rôle spécifié (role_id == 1 pour le rôle "client")
+    $users = User::where('role_id', 3)->get();
+
+    // Retournez la liste des utilisateurs
+    return $users;
+}
 
     /**
      * Store a newly created resource in storage.
