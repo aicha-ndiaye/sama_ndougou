@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class gererCommande extends Notification
+class commandeEnAttente extends Notification
 {
     use Queueable;
 

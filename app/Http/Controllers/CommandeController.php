@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use App\Notifications\gererCommande;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\CommandeEnCours;
+use App\Notifications\CommandeEnAttente;
 use App\Http\Requests\createCommandeRequest;
 
 class CommandeController extends Controller
@@ -71,7 +72,7 @@ class CommandeController extends Controller
             'nombre_produit' => $produit->quantite,
         ]);
       $user=User::where('id',$commande->user_id)->first();
-        $user->notify(new gererCommande());
+        $user->notify(new CommandeEnAttente());
 
         $produit->delete();
     }

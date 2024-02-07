@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Livreur;
 use App\Models\Commande;
 use App\Models\Livraison;
 use Illuminate\Http\Request;
 use App\Notifications\gererCommande;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\changerStatutRequest;
 use App\Notifications\nouvelleCommande;
+use App\Notifications\CommandeEnAttente;
+use App\Http\Requests\changerStatutRequest;
 
 class LivreurController extends Controller
 {
@@ -174,6 +176,8 @@ class LivreurController extends Controller
         $livraisons = Livraison::where('livreur_id', $livreur->id)
             ->where('commande_id', $commandeId)
             ->get();
+        //     $user=User::where('id',$commande->user_id)->first();
+        // $user->notify(new CommandeEnAttente());
 
         // ICI On verifie si la livraison existe
         if ($livraisons->all() == null) {
