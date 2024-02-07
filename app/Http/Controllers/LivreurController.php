@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Notifications\nouvelleCommande;
 use App\Notifications\CommandeEnAttente;
 use App\Http\Requests\changerStatutRequest;
+use App\Notifications\affecterClient;
+use App\Notifications\CommandeEnCours;
 
 class LivreurController extends Controller
 {
@@ -65,6 +67,12 @@ class LivreurController extends Controller
                 'status_message' => 'La commande a déjà été affectée à un livreur.',
             ]);
         }
+        $livreur= Livreur::where('id',$commande->user_id)->first();
+        // dd($livreur);
+        $livreur->notify(new affecterClient());
+        
+        $user= User::where('id',$commande->user_id)->first();
+        $user->notify(new CommandeEnCours());
 
         // **Ajout d'une vérification pour s'assurer qu'un livreur est disponible**
         $livreurDisponible = Livreur::where('statut', 'disponible')->first();
