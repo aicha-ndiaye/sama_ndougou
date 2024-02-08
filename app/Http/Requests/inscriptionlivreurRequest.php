@@ -31,7 +31,7 @@ class InscriptionLivreurRequest extends FormRequest
             'password' => Password::defaults(),
             'adresse' => ['required', 'string', 'regex:/^[a-zA-Z0-9 ]+$/'],
             'telephone' => ['required', 'regex:/^7\d{8}$/'],
-            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif'],
         ];
     }
 

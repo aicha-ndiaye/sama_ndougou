@@ -34,27 +34,34 @@ class userController extends Controller
 
     public function inscriptionClient(InscriptionClientRequest $request)
     {
-        $imagePath = null;
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $imagePath = $image->storeAs('images', $imageName, 'public');
-        }
         $roleClient = Role::where('nomRole', 'client')->first();
-        $user = User::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'adresse' => $request->adresse,
-            'telephone'=>$request->telephone,
-            'image' => $imagePath,
-            'role_id' => $roleClient->id,
-        ]);
+        // $user = User::create([
+            $user = new user();
+            $user->nom = $request->nom;
+            $user->prenom= $request->prenom;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->adresse = $request->adresse;
+            $user->telephone =$request->telephone;
+            $user->role_id = $roleClient->id;
+
+          $this->saveImage($request, 'image', 'images', $user, 'image');
+          $user->save();
+
+        // ]);
 
         return response()->json(['message' => 'client ajouté avec succès',$user], 201);
     }
 
+    private function saveImage($request, $fileKey, $path, $produit, $fieldName)
+    {
+        if ($request->file($fileKey)) {
+            $file = $request->file($fileKey);
+            $filename = date('YmdHi') . $file->getClientOriginalName();
+            $file->move(public_path($path), $filename);
+            $produit->$fieldName = $filename;
+        }
+    }
 
     public function inscriptionlivreur(InscriptionLivreurRequest $request)
 {

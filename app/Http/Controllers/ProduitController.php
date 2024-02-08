@@ -23,12 +23,6 @@ class ProduitController extends Controller
         if ($user->role_id == 1) {
             $imagePath = null;
 
-            if ($request->hasFile('image')) {
-                $image = $request->file('image');
-                $imageName = time().'.'.$image->getClientOriginalExtension();
-                $imagePath = $image->storeAs('images', $imageName, 'public');
-            }
-
             // Vérifie si le produit existe déjà
             $produitExistant = Produit::where('nomProduit', $request->nomProduit)->first();
 
@@ -40,14 +34,15 @@ class ProduitController extends Controller
                 return response()->json(['message' => 'Produit ajouté avec succès', 'produit' => $produitExistant], 201);
             } else {
                 // Ajoute le produit
-                $produit = Produit::create([
-                    'nomProduit' => $request->nomProduit,
-                    'prix' => $request->prix,
-                    'quantiteTotale' => $request->quantiteTotale,
-                    'image' => $imagePath,
-                    'description' => $request->description,
-                    'categorie_produit_id' => $request->categorie_produit_id,
-                ]);
+                $produit = new Produit();
+                $produit->nomProduit = $request->nomProduit;
+                $produit->prix = $request->prix;
+                $produit->quantiteTotale = $request->quantiteTotale;
+                $produit->image = $imagePath;
+                $produit->description = $request->description;
+                $produit->categorie_produit_id = $request->categorie_produit_id;
+                $this->saveImage($request, 'image', 'images', $produit, 'image');
+                $produit->save();
 
                 return response()->json(['message' => 'Produit ajouté avec succès', 'produit' => $produit], 201);
             }
@@ -58,6 +53,18 @@ class ProduitController extends Controller
         return response()->json(['message' => 'Non autorisé'], 401);
     }
 }
+
+
+private function saveImage($request, $fileKey, $path, $produit, $fieldName)
+{
+    if ($request->file($fileKey)) {
+        $file = $request->file($fileKey);
+        $filename = date('YmdHi') . $file->getClientOriginalName();
+        $file->move(public_path($path), $filename);
+        $produit->$fieldName = $filename;
+    }
+}
+
 
 
     public function updateProduit(updateProduitRequest $request, $id)
@@ -72,12 +79,8 @@ class ProduitController extends Controller
                     return response()->json(['message' => 'produit non trouvée'], 404);
                 }
 
-                $imagePath = null;
-                if ($request->hasFile('image')) {
-                    $image = $request->file('image');
-                $imageName = time().'.'.$image->getClientOriginalExtension();
-                $imagePath = $image->storeAs('images', $imageName, 'public');
-                }
+
+                $this->saveImage($request, 'image', 'images', $produit, 'image');
 
                 // Calculons la différence de quantité
                 $quantiteDifference = $request->quantiteTotale - $produit->quantiteTotale;
@@ -88,7 +91,6 @@ class ProduitController extends Controller
                 // Mettons à jour les autres champs
                 $produit->nomProduit = $request->nomProduit;
                 $produit->prix = $request->prix;
-                $produit->image = $imagePath;
                 $produit->description = $request->description;
 
                 $produit->save();
