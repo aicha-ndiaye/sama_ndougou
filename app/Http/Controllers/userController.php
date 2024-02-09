@@ -64,27 +64,20 @@ class userController extends Controller
     }
 
     public function inscriptionlivreur(InscriptionLivreurRequest $request)
-{
-    $imagePath = null;
+{$roleLivreur = Role::where('nomRole', 'client')->first();
+    // $user = User::create([
+        $user = new user();
+        $user->nom = $request->nom;
+        $user->prenom= $request->prenom;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->adresse = $request->adresse;
+        $user->telephone =$request->telephone;
+        $user->role_id = $roleLivreur->id;
 
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $imagePath = $image->storeAs('images', $imageName, 'public');
-    }
+      $this->saveImage($request, 'image', 'images', $user, 'image');
+      $user->save();
 
-    $roleLivreur = Role::where('nomRole', 'livreur')->first();
-
-    $user = User::create([
-        'nom' => $request->nom,
-        'prenom' => $request->prenom,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'adresse' => $request->adresse,
-        'role_id' => $roleLivreur->id,
-        'telephone' => $request->telephone,
-        'image' => $imagePath,
-    ]);
 
     $livreur = $user->livreur()->create([
         'statut' => $request->statut ?? 'occupé',
@@ -95,11 +88,13 @@ class userController extends Controller
 
     public function login(Request $request)
     {
+
         // data validation
         $validator = Validator::make($request->all(), [
             "email" => "required|email",
             "password" => Rules\Password::defaults()
         ]);
+
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
@@ -109,8 +104,17 @@ class userController extends Controller
             "email" => $request->email,
             "password" => $request->password
         ]);
+        // dd('ok');
+        $user = User::where('email', $request->email)->first();
 
-        if (!empty($token)) {
+        if ($user && $user->Block) {
+ 
+            return response()->json([
+                'error' => 'votre compte a été bloqué',
+                'status' => 403
+            ]);
+            $statusCode = 403;
+        }elseif (!empty($token)) {
 
             return response()->json([
                 "status" => true,
@@ -279,13 +283,18 @@ public function listerLivreur()
     return $users;
 }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+
+public function blocqueLivreur(User $user)
+{
+    try {
+        $user->Block = true;
+        $user->save();
+
+        return response()->json(['message' => 'User blocked permanently successfully'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
     }
+}
 
     /**
      * Display the specified resource.

@@ -18,7 +18,7 @@ class LivreurMiddleware
         return $next($request);
 
 
-        if (auth()->check() && auth()->user()->role === 'livreur') {
+        if (auth()->check() && auth()->user()->role_id =='3') {
             return $next($request);
         }
 

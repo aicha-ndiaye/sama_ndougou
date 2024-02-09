@@ -15,13 +15,15 @@ class adminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
 
-            if (auth()->check() && auth()->user()->role === 'admin') {
+
+            if (auth()->check() && auth()->user()->role_id == 1) {
                 return $next($request);
+            }else{
+                return response()->json(['message' => 'Non autorisé seul ladmin peut faire cette action'], 403);
             }
 
-            return response()->json(['message' => 'Non autorisé'], 403);
+
 
         }
     }

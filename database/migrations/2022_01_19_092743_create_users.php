@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('adresse');
             $table->string('telephone')->nullable();
+            $table->boolean('Block')->default(0);
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->string('image')->nullable();
             $table->rememberToken();

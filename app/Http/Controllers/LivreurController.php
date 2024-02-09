@@ -67,10 +67,11 @@ class LivreurController extends Controller
                 'status_message' => 'La commande a déjà été affectée à un livreur.',
             ]);
         }
-        $livreur= Livreur::where('id',$commande->user_id)->first();
-        // dd($livreur);
+
+        $livreur= Livreur::where('statut','disponible')->first();
+        //  dd($livreur);
         $livreur->notify(new affecterClient());
-        
+
         $user= User::where('id',$commande->user_id)->first();
         $user->notify(new CommandeEnCours());
 

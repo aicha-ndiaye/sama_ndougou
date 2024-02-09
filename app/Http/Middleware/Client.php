@@ -18,7 +18,7 @@ class Client
     {
         return $next($request);
 
-            if (auth()->check() && auth()->user()->role === 'client') {
+            if (auth()->check() && auth()->user()->role_id == '3') {
                 return $next($request);
             }
 

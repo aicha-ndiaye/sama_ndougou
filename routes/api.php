@@ -61,11 +61,12 @@ Route::post('/changerStatut', [LivreurController::class, 'changerStatut']);
 Route::middleware(['auth:api', 'admin'])->group(function () {
 
     Route::post('/inscriptionlivreur', [UserController::class, 'inscriptionlivreur']);
+    Route::post('/blocqueLivreur/{user}', [UserController::class, 'blocqueLivreur']);
     Route::get('/listerClients', [userController::class, 'listerClients']);
     Route::get('/listerLivreur', [userController::class, 'listerLivreur']);
     Route::post('/createCategorieProduits', [CategorieController::class, 'createCategorieProduits']);
     Route::post('/createProduit', [ProduitController::class, 'createProduit']);
-    Route::put('/updateProduit/{id}', [ProduitController::class, 'updateProduit']);
+    Route::post('/updateProduit/{id}', [ProduitController::class, 'updateProduit']);
     Route::delete('/deleteProduit/{id}', [ProduitController::class, 'deleteProduit']);
     Route::post('/createCategorieBlog', [categorieBlogController::class, 'createCategorieBlog']);
     Route::post('/createPost', [PostController::class, 'createPost']);
