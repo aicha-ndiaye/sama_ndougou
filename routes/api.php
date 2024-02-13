@@ -88,6 +88,7 @@ Route::middleware(['auth:api', 'client'])->group(function () {
     Route::get('/indexPanier', [PanierController::class, 'indexPanier']);
     //cree une commande
     Route::post('/createCommande', [CommandeController::class, 'createCommande']);
+    Route::get('/detailCommande{commande}', [CommandeController::class, 'detailCommande']);
     Route::post('/ajouterAuPanier', [PanierController::class, 'ajouterAuPanier']);
     Route::get('/afficherProduitsPanier', [PanierController::class, 'afficherProduitsPanier']);
     Route::post('/createAvis', [avis_clienttController::class, 'createAvis']);

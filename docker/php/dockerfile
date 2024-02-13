@@ -1,27 +1,41 @@
+# nous avons utilisé l'image Docker "php:8.2-apache" comme base
 FROM php:8.2-apache
+
+# Définition du répertoire de travail pour les commandes suivantes
 WORKDIR /var/www/html
+
+# Copie de tous les fichiers du répertoire de construction dans le répertoire de travail du conteneur
 COPY . .
 
+# Ajout de la configuration "ServerName localhost" à la fin du fichier de configuration Apache
 RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
+# Mise à jour des paquets et installation de certains outils et dépendances
 RUN apt-get update \
     && apt-get install -qq -y --no-install-recommends \
     cron \
     vim \
     locales coreutils apt-utils git libicu-dev g++ libpng-dev libxml2-dev libzip-dev libonig-dev libxslt-dev;
 
+# Configuration des locales pour l'environnement
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
     echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
     locale-gen
 
+# Installation de Composer en utilisant curl
 RUN curl -sSk https://getcomposer.org/installer | php -- --disable-tls && \
     mv composer.phar /usr/local/bin/composer
 
+# Configuration et installation de plusieurs extensions PHP
 RUN docker-php-ext-configure intl
 RUN docker-php-ext-install pdo pdo_mysql mysqli gd opcache intl zip calendar dom mbstring zip gd xsl && a2enmod rewrite
+
+# Installation de l'extension PHP APCu
 RUN pecl install apcu && docker-php-ext-enable apcu
 
+# Téléchargement de l'outil pour installer les extensions PHP
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
+# Attribution des permissions d'exécution à l'outil et installation de l'extension PHP amqp
 RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
     install-php-extensions amqp

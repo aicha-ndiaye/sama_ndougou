@@ -60,7 +60,7 @@ class ProduitTest extends TestCase
         ];
 
         // Effectuez une requête PUT pour mettre à jour le produit
-        $response = $this->putJson("api/updateProduit/{$produit->id}", $nouvellesDonnees);
+        $response = $this->postJson("api/updateProduit/{$produit->id}", $nouvellesDonnees);
 
         // Assurez-vous que la requête a réussi
         $response->assertStatus(200);

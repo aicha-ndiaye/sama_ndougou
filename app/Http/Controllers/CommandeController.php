@@ -43,11 +43,11 @@ class CommandeController extends Controller
     public function createCommande(createCommandeRequest $request)
 {
     $user = Auth::guard('api')->user();
-    $panier = Panier::where('user_id', $user->id)->get();
+    // $panier = Panier::where('user_id', $user->id)->get();
 
-    if (count($panier) == 0) {
-        return response()->json(['status' => 404, 'status_message' => 'Le panier est vide ou n\'existe pas.']);
-    }
+    // if (count($panier) == 0) {
+    //     return response()->json(['status' => 404, 'status_message' => 'Le panier est vide ou n\'existe pas.']);
+    // }
 
     try {
     $commande = Commande::create([
@@ -58,9 +58,9 @@ class CommandeController extends Controller
     ]);
 
     $montantTotal = 0;
-    $quantiteTotal = 0;
+    // $quantiteTotal = 0;
 
-    $produitsPanier = Panier::where('user_id', $user->id)->with('produit')->get();
+    // $produitsPanier = Panier::where('user_id', $user->id)->with('produit')->get();
 
     // foreach ($produitsPanier as $produit) {
     //     $montantTotal += $produit->quantite * $produit->produit->prix;
@@ -106,7 +106,7 @@ class CommandeController extends Controller
         ],
         'produits' => [
             'montantTotal' => $montantTotal,
-            'quantiteTotal' => $quantiteTotal,
+            // 'quantiteTotal' => $quantiteTotal,
         ],
     ]);
 } catch (\Exception $e) {
@@ -230,4 +230,16 @@ class CommandeController extends Controller
             return response()->json(['message' => 'Vous devez être connecté pour effectuer cette action'], 401);
         }
     }
+     public function detailCommande(Commande $commande){
+        $user = Auth::guard('api')->user();
+        if ($user->id==$commande->user_id){
+            return response()->json($commande);
+        }else{
+            return response()->json([
+                'message'=>'Commande introuvable',
+                'StatusCode'=>400
+            ]);
+        }
+
+     }
 }

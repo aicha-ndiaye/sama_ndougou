@@ -1,48 +1,73 @@
 version: "3.8"
+# ici on définit la version de Docker Compose utilisée dans ce fichier.
+
 services:
-    # Mysql database container
+    # on éfinit les différents services c'est a dire conteneurs à exécuter.
+
+    # ici nous avons le conteneur Mysql database 
     db:
+        # Nom de l'image Docker à utiliser pour ce service.
         image: mysql
+        # Nom du conteneur Docker à créer pour ce service.
         container_name: mysql_samandougou
+        # Redémarrage automatique du conteneur en cas d'échec ou d'arrêt.
         restart: always
+        # Configuration des volumes pour persistenter les données de la base de données.
         volumes:
             - db-data:/var/lib/mysql
+        # Variables d'environnement spécifiques à ce service (mot de passe vide ici).
         environment:
             MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+        # Redirection du port de l'hôte vers le port du conteneur.
         ports:
             - "3309:3306"
+        # Liaison de ce service au réseau "andandoo".
         networks:
             - andandoo
 
     # phpmyadmin container
     phpmyadmin:
+        # Nom de l'image Docker à utiliser pour ce service.
         image: phpmyadmin
+        # Nom du conteneur Docker à créer pour ce service.
         container_name: phpmyadmin_samandougou
+        # Redémarrage automatique du conteneur en cas d'échec ou d'arrêt.
         restart: always
+        # Dépendance de ce service sur le service "db".
         depends_on:
             - db
+        # Redirection du port de l'hôte vers le port du conteneur.
         ports:
             - 8010:80
+        # Variables d'environnement spécifiques à ce service (hôte de la base de données).
         environment:
             PMA_HOST: db
+        # Liaison de ce service au réseau "andandoo".
         networks:
             - andandoo
 
     www:
+        # Construction de l'image Docker à partir du Dockerfile situé dans le répertoire "docker/php".
         build: docker/php
+        # Nom du conteneur Docker à créer pour ce service.
         container_name: samandougou
+        # Redirection du port de l'hôte vers le port du conteneur.
         ports:
             - "8002:80"
+        # Configuration des volumes pour fournir la configuration Apache et les fichiers de l'application web.
         volumes:
             - ./docker/php/vhosts:/etc/apache2/sites-enabled
             - ./:/var/www/html
+        # Redémarrage automatique du conteneur en cas d'échec ou d'arrêt.
         restart: always
+        # Liaison de ce service au réseau "andandoo".
         networks:
             - andandoo
 
 networks:
+    # Définition du réseau utilisé par les différents services.
     andandoo:
 
-
 volumes:
+    # Définition du volume pour stocker les données de la base de données.
     db-data:
