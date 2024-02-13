@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Panier;
 use App\Models\Livreur;
+use App\Models\Produit;
 use App\Models\Commande;
 use App\Models\Livraison;
 use Illuminate\Http\Request;
@@ -61,21 +62,35 @@ class CommandeController extends Controller
 
     $produitsPanier = Panier::where('user_id', $user->id)->with('produit')->get();
 
-    foreach ($produitsPanier as $produit) {
-        $montantTotal += $produit->quantite * $produit->produit->prix;
-        $quantiteTotal += $produit->quantite;
+    // foreach ($produitsPanier as $produit) {
+    //     $montantTotal += $produit->quantite * $produit->produit->prix;
+    //     $quantiteTotal += $produit->quantite;
 
-        DetailProduit::create([
-            'commande_id' => $commande->id,
-            'produit_id' => $produit->produit->id,
-            'montant' => $produit->quantite * $produit->produit->prix,
-            'nombre_produit' => $produit->quantite,
-        ]);
-      $user=User::where('id',$commande->user_id)->first();
-        $user->notify(new CommandeEnAttente());
+    //     DetailProduit::create([
+    //         'commande_id' => $commande->id,
+    //         'produit_id' => $produit->produit->id,
+    //         'montant' => $produit->quantite * $produit->produit->prix,
+    //         'nombre_produit' => $produit->quantite,
+    //     ]);
+    //   $user=User::where('id',$commande->user_id)->first();
+    //     $user->notify(new CommandeEnAttente());
 
-        $produit->delete();
-    }
+        // $produit->delete();
+        foreach ($request->input('panier') as $produit) {
+            DetailProduit::create([
+                'commande_id' => $commande->id,
+                'produit_id' => $produit['produit_id'],
+                'nombre_produit' => $produit['nombre_produit'],
+                'montant' => $produit['montant'],
+            ]);
+
+            Produit::where('id', $produit['produit_id'])->decrement('quantiteTotale', $produit['nombre_produit']);
+
+            // Ajouter le montant du produit au montant total
+            $montantTotal += $produit['montant'];
+        }
+         $montantTotal+=$montantTotal;
+
 
     return response()->json([
         'status' => 200,
@@ -122,7 +137,7 @@ class CommandeController extends Controller
 
         $commande->update(['statut' => 'enCours']);
 
-        $commande->$user->notify(new gererCommande());
+        $commande->$user->notify(new CommandeEnCours());
 
         return response()->json(['message' => 'Votre commande est en cours de livraison', 'commande' => $commande], 200);
     }
