@@ -97,7 +97,9 @@ Route::middleware(['auth:api', 'client'])->group(function () {
     Route::get('/indexCommande', [CommandeController::class, 'indexCommande']);
     Route::get('/detailCommande/{id}', [detailpoduitController::class, 'detailCommande']);
     Route::delete('/deleteCommande/{id}', [CommandeController::class, 'deleteCommande']);
+    Route::post('affecterLivreur/{commande}', [LivreurController::class, 'affecterLivreur']);
 });
+
 Route::middleware(['auth:api', 'livreur'])->group(function () {
     Route::post('/changerStatut', [LivreurController::class, 'changerStatut']);
     Route::post('/CommandeTerminee/{commande}', [LivreurController::class, 'CommandeTerminee']);

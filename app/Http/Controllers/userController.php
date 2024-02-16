@@ -64,7 +64,8 @@ class userController extends Controller
     }
 
     public function inscriptionlivreur(InscriptionLivreurRequest $request)
-{$roleLivreur = Role::where('nomRole', 'client')->first();
+
+{$roleLivreur = Role::where('nomRole', 'livreur')->first();
     // $user = User::create([
         $user = new user();
         $user->nom = $request->nom;
@@ -108,7 +109,7 @@ class userController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user && $user->Block) {
- 
+
             return response()->json([
                 'error' => 'votre compte a été bloqué',
                 'status' => 403

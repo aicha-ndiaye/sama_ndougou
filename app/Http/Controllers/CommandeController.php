@@ -72,8 +72,8 @@ class CommandeController extends Controller
     //         'montant' => $produit->quantite * $produit->produit->prix,
     //         'nombre_produit' => $produit->quantite,
     //     ]);
-    //   $user=User::where('id',$commande->user_id)->first();
-    //     $user->notify(new CommandeEnAttente());
+      $user=User::where('id',$commande->user_id)->first();
+        $user->notify(new CommandeEnAttente());
 
         // $produit->delete();
         foreach ($request->input('panier') as $produit) {

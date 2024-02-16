@@ -48,17 +48,9 @@ class LivreurController extends Controller
         ]);
     }
 
+
     public function affecterLivreur(Commande $commande, Request $request)
     {
-        // Vérifiez si l'utilisateur est connecté et a le rôle d'administrateur
-        $user = Auth::guard('api')->user();
-        if (!$user || $user->role_id != 1) {
-            return response()->json([
-                'status' => 403,
-                'status_message' => 'Vous n\'avez pas les droits pour affecter un livreur à cette commande',
-            ]);
-        }
-
         // Vérifiez si la commande est déjà affectée à un livreur
         $exist = Livraison::where('commande_id', $commande->id)->first();
         if ($exist) {
@@ -66,52 +58,39 @@ class LivreurController extends Controller
                 'status' => 400,
                 'status_message' => 'La commande a déjà été affectée à un livreur.',
             ]);
-        }
-
-        $livreur= Livreur::where('statut','disponible')->first();
-        //  dd($livreur);
-        $livreur->notify(new affecterClient());
-
-        $user= User::where('id',$commande->user_id)->first();
-        $user->notify(new CommandeEnCours());
-
-        // **Ajout d'une vérification pour s'assurer qu'un livreur est disponible**
-        $livreurDisponible = Livreur::where('statut', 'disponible')->first();
-        if (!$livreurDisponible) {
+        } else {
+            // Ajout d'une vérification pour s'assurer qu'un livreur est disponible
+            $livreurDisponible = Livreur::where('statut', 'disponible')->first();
+            if (!$livreurDisponible) {
+                return response()->json([
+                    'status' => 404,
+                    'status_message' => 'Aucun livreur disponible pour le moment.',
+                ]);
+            }
+            $livraison = new Livraison();
+            if ($livraison->livreur_id = $livreurDisponible->id) {
+                $livreurDisponible->statut = 'occupe';
+                $livreurDisponible->save();
+                $livreurDisponible->user->notify(new nouvelleCommande());
+            }
+            if ($livraison->commande_id = $commande->id) {
+                $commande->statut = "enCours";
+                $commande->save();
+                $user = User::find($commande->user_id);
+                if ($user) {
+                    $user->notify(new CommandeEnCours());
+                }
+            }
+            $livraison->dateLivraison = now();
+            $livraison->save();
             return response()->json([
-                'status' => 404,
-                'status_message' => 'Aucun livreur disponible pour le moment.',
+                'status' => 200,
+                'status_message' => 'Livreur affecté avec succès',
+                'dat a' => $livraison,
             ]);
         }
-
-        // Mettez à jour le statut du livreur et sauvegardez
-        $livreurDisponible->statut = 'occupe';
-        $livreurDisponible->save();
-
-        // Créez une nouvelle livraison
-        $livraison = new Livraison([
-            'livreur_id' => $livreurDisponible->id,
-            'commande_id' => $commande->id,
-            'dateLivraison' => now(),
-        ]);
- // Notifiez le livreur de la nouvelle commande
-        $livreurDisponible->user->notify(new nouvelleCommande());
-
-        // Sauvegardez la livraison
-        $livraison->save();
-
-        // Mettez à jour la commande avec l'ID du livreur
-        $commande->update([
-            'user_id' => $livreurDisponible->user->id,
-            'statut' => 'enCours',
-        ]);
-
-        return response()->json([
-            'status' => 200,
-            'status_message' => 'Livreur affecté avec succès',
-            'data' => $livraison,
-        ]);
     }
+
 
     public function listerLivreursDisponible()
     {
