@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('nomPost');
             $table->string('titrePost');
-            $table->string('description');
+            $table->text('description');
             $table->string('image');
             $table->date('datePost');
             $table->foreignIdFor(CategorieBlog::class)->nullable()->constrained()->onDelete('cascade');

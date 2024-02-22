@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Commande extends Model
 {
@@ -40,5 +41,10 @@ class Commande extends Model
     public function panier()
     {
         return $this->belongsTo(Panier::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

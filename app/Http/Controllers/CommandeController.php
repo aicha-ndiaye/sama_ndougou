@@ -116,31 +116,31 @@ class CommandeController extends Controller
 }
 
 
-    public function commandeEnCours(Request $request, $id)
-    {
+    // public function commandeEnCours(Request $request, $id)
+    // {
 
-        if (auth()->check()) {
-            return response()->json(['message' => 'Non autorisé, vous devez vous connecter'], 401);
-        }
+    //     if (auth()->check()) {
+    //         return response()->json(['message' => 'Non autorisé, vous devez vous connecter'], 401);
+    //     }
 
-        $user = Auth::guard('api')->user();
+    //     $user = Auth::guard('api')->user();
 
-        if ($user->role_id !== 1) {
-            return response()->json(['message' => 'Non autorisé. Seuls les administrateurs peuvent effectuer cette action.'], 403);
-        }
+    //     if ($user->role_id !== 1) {
+    //         return response()->json(['message' => 'Non autorisé. Seuls les administrateurs peuvent effectuer cette action.'], 403);
+    //     }
 
-        $commande = Commande::find($id);
+    //     $commande = Commande::find($id);
 
-        if (!$commande) {
-            return response()->json(['message' => 'Commande non trouvée'], 404);
-        }
+    //     if (!$commande) {
+    //         return response()->json(['message' => 'Commande non trouvée'], 404);
+    //     }
 
-        $commande->update(['statut' => 'enCours']);
+    //     $commande->update(['statut' => 'enCours']);
 
-        $commande->$user->notify(new CommandeEnCours());
+    //     $commande->$user->notify(new CommandeEnCours());
 
-        return response()->json(['message' => 'Votre commande est en cours de livraison', 'commande' => $commande], 200);
-    }
+    //     return response()->json(['message' => 'Votre commande est en cours de livraison', 'commande' => $commande], 200);
+    // }
 
     public function listeCommandeEnAttente()
     {

@@ -46,7 +46,7 @@ Route::post('ajouterRole', [UserController::class, 'ajouterRole']);
 // lister les post
 Route::get('/indexPost', [PostController::class, 'indexPost']);
 
-Route::get('/commandeEnCours/{id}', [CommandeController::class, 'commandeEnCours']);
+// Route::get('/commandeEnCours/{id}', [CommandeController::class, 'commandeEnCours']);
 Route::get('/listeCommandeEnAttente', [CommandeController::class, 'listeCommandeEnAttente']);
 Route::get('/listeCommandeEnCours', [CommandeController::class, 'listeCommandeEnCours']);
 Route::get('/ListecommandeTerminee', [CommandeController::class, 'ListecommandeTerminee']);
@@ -97,10 +97,11 @@ Route::middleware(['auth:api', 'client'])->group(function () {
     Route::get('/indexCommande', [CommandeController::class, 'indexCommande']);
     Route::get('/detailCommande/{id}', [detailpoduitController::class, 'detailCommande']);
     Route::delete('/deleteCommande/{id}', [CommandeController::class, 'deleteCommande']);
-    Route::post('affecterLivreur/{commande}', [LivreurController::class, 'affecterLivreur']);
+    // Route::post('affecterLivreur/{commande}', [LivreurController::class, 'affecterLivreur']);
 });
 
 Route::middleware(['auth:api', 'livreur'])->group(function () {
     Route::post('/changerStatut', [LivreurController::class, 'changerStatut']);
     Route::post('/CommandeTerminee/{commande}', [LivreurController::class, 'CommandeTerminee']);
+    Route::get('/ListerCommandeAffecter', [LivreurController::class, 'ListerCommandeAffecter']);
 });

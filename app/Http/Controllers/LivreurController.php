@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Notifications\nouvelleCommande;
 use App\Notifications\CommandeEnAttente;
 use App\Http\Requests\changerStatutRequest;
+use App\Models\detailProduit;
 use App\Notifications\affecterClient;
 use App\Notifications\CommandeEnCours;
 
@@ -196,4 +197,33 @@ class LivreurController extends Controller
 
         return response()->json(['message' => 'Commande livrée avec succès et marquée comme terminée'], 200);
     }
+
+    public function ListerCommandeAffecter(){
+        $user = Livreur::find(auth()->user()->livreur->id);
+      // dd($user->id);
+        $livraisonAffecter = Livraison::where('livreur_id', $user->id)->orderBy('created_at', 'desc')->get();
+       // dd($livraisonAffecter);
+        $ListecommandeAffecter = [];
+        //dd($livraisonAffecter);
+        foreach ($livraisonAffecter  as $livraison) {
+
+
+            $ListecommandeAffecter[] = [
+                'Id' => $livraison->id,
+                'client'=>[
+                    'Nom' => $livraison->commande->user->nom,
+                    'Prenom' => $livraison->commande->user->prenom,
+                    'Adresse' => $livraison->commande->adresse_de_livraison,
+                ],
+                'Date_commande' => $livraison->commande->created_at,
+                'Etat' => $livraison->statut
+            ];
+        }
+        return response()->json([
+            'status' => 200,
+            'status_message' => 'la liste des commandes',
+            'data' => $ListecommandeAffecter
+        ]);
+    }
+
 }

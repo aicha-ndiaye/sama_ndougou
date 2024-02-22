@@ -89,7 +89,6 @@ class userController extends Controller
 
     public function login(Request $request)
     {
-
         // data validation
         $validator = Validator::make($request->all(), [
             "email" => "required|email",

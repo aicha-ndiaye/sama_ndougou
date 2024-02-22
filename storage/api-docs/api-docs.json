@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "sama ndougou",
-        "description": "Your API Description",
+        "title": "sama Ndougou",
+        "description": "L'API Sama Ndougou offre une interface de programmation permettant d'interagir avec la plateforme  dédiée à la vente de légumes en ligne. Cette API fournit les fonctionnalités nécessaires pour accéder aux données et aux fonctionnalités de la plateforme.Offrant ainsi une expérience d'achat de légumes en ligne fluide et conviviale.",
         "version": "1.0.0"
     },
     "security": [
@@ -23,6 +23,609 @@
         "multipart/form-data"
     ],
     "paths": {
+        "/api/listerLivreur": {
+            "get": {
+                "summary": "listerLivreur",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion livreur"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/listerLivreursDisponible": {
+            "get": {
+                "summary": "listerLivreursDisponibles",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion livreur"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/changerStatut": {
+            "post": {
+                "summary": "changerStatut",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion livreur"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "statut": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "example": {
+                                "statut": "disponible"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/AffecterLivreur/2": {
+            "post": {
+                "summary": "AffecterLivreur",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion livreur"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/listerLivreursOccupe": {
+            "get": {
+                "summary": "listerLivreursOccupe",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion livreur"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/listerClients": {
+            "get": {
+                "summary": "lister client",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion commande"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/CommandeTerminee/1": {
+            "post": {
+                "summary": "CommandeTerminee",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion commande"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/deleteCommande/4": {
+            "delete": {
+                "summary": "delete commande",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "Deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Unauthorize",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion commande"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/listeCommandeEnCours": {
+            "get": {
+                "summary": "listeCommandeEnCours",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion commande"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/listeCommandeEnAttente": {
+            "get": {
+                "summary": "liste commande en attente",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion commande"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
+        "/api/ListecommandeTerminee": {
+            "get": {
+                "summary": "ListecommandeTerminee",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion commande"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    },
+                    {
+                        "in": "header",
+                        "name": "Authorization",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
         "/api/indexCommande": {
             "get": {
                 "summary": "indexCommande",
@@ -142,7 +745,7 @@
                                 }
                             },
                             "example": {
-                                "adresse_de_livraison": "liberte6"
+                                "adresse_de_livraison": "liberte"
                             }
                         }
                     }
@@ -405,68 +1008,9 @@
                 }
             }
         },
-        "/api/deletePanier/7": {
-            "delete": {
-                "summary": "deletePanier",
-                "description": "",
-                "responses": {
-                    "204": {
-                        "description": "Deleted successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Unauthorize",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "gestion panier"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ]
-            }
-        },
-        "/api/ProduitsCommande/1": {
+        "/api/blocqueLivreur/4": {
             "post": {
-                "summary": "produitcommande",
+                "summary": "bloquer utilisateur",
                 "description": "",
                 "responses": {
                     "201": {
@@ -507,7 +1051,7 @@
                     }
                 },
                 "tags": [
-                    "gestion panier"
+                    "gestion blog"
                 ],
                 "parameters": [
                     {
@@ -518,152 +1062,6 @@
                     {
                         "in": "header",
                         "name": "Authorization",
-                        "type": "string"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {}
-                            },
-                            "example": {}
-                        }
-                    }
-                }
-            }
-        },
-        "/api/ajoutProduitPanier": {
-            "post": {
-                "summary": "ajoutProduitPanier",
-                "description": "",
-                "responses": {
-                    "201": {
-                        "description": "Created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Unauthorize",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "gestion panier"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "produit_id": {
-                                        "type": "string"
-                                    },
-                                    "quantite": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "example": {
-                                "produit_id": "1",
-                                "quantite": "655"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/afficherProduitsPanier": {
-            "get": {
-                "summary": "lister panier",
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "gestion panier"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "",
                         "type": "string"
                     }
                 ]
@@ -740,7 +1138,7 @@
                 }
             }
         },
-        "/api/recherchePost/1": {
+        "/api/recherchePost/3": {
             "get": {
                 "summary": "recherche post",
                 "description": "",
@@ -854,7 +1252,7 @@
                                 }
                             },
                             "example": {
-                                "nomCategorie": "astuce"
+                                "nomCategorie": "recette"
                             }
                         }
                     }
@@ -1055,7 +1453,7 @@
                                 }
                             },
                             "example": {
-                                "nomPost": "mafe un plat aime",
+                                "nomPost": "thiebou deune",
                                 "titrePost": "dkfpojgh nk",
                                 "description": "yassa hbieune penda mbaye cuisiner par une saint louisienne",
                                 "image": {
@@ -1070,7 +1468,7 @@
                 }
             }
         },
-        "/api/updatePost/1": {
+        "/api/updatePost/2": {
             "post": {
                 "summary": "update post",
                 "description": "",
@@ -1155,7 +1553,7 @@
                                 }
                             },
                             "example": {
-                                "nomPost": "recette thiebou dieune bou neh",
+                                "nomPost": "recehiebou dieune bou neh",
                                 "titrePost": "thiebou dieunde penda mbaye bou fatt ",
                                 "description": "thiebou dieune penda mbaye cuisiner par une saint louisienne Aicha ndiaye",
                                 "image": {
@@ -1517,7 +1915,7 @@
                                 }
                             },
                             "example": {
-                                "nomRole": "client"
+                                "nomRole": "livreur"
                             }
                         }
                     }
@@ -1666,7 +2064,7 @@
                                 }
                             },
                             "example": {
-                                "email": "bichasen@gmail.com",
+                                "email": "aicha8420@gmail.com",
                                 "password": "passer123"
                             }
                         }
@@ -1838,7 +2236,7 @@
                 }
             }
         },
-        "/api/updateProduit/1": {
+        "/api/updateProduit/2": {
             "post": {
                 "summary": "update produit",
                 "description": "",
@@ -1923,7 +2321,7 @@
                                 }
                             },
                             "example": {
-                                "nomProduit": "piment",
+                                "nomProduit": "pimentt",
                                 "prix": "200",
                                 "quantiteTotale": "10",
                                 "description": "kndk, nfjrifjeiohkn",
@@ -2072,7 +2470,7 @@
                                     "description": {
                                         "type": "string"
                                     },
-                                    "": {
+                                    "categorie_produit_id": {
                                         "type": "string"
                                     },
                                     "image": {
@@ -2082,11 +2480,11 @@
                                 }
                             },
                             "example": {
-                                "nomProduit": "citron",
+                                "nomProduit": "celerie",
                                 "prix": "100",
                                 "quantiteTotale": "400",
                                 "description": "ceci est un legume",
-                                "": "",
+                                "categorie_produit_id": "1",
                                 "image": {
                                     "type": "string",
                                     "format": "binary"
@@ -2166,7 +2564,7 @@
                                 }
                             },
                             "example": {
-                                "nomCategorie": "pack"
+                                "nomCategorie": "legume"
                             }
                         }
                     }
