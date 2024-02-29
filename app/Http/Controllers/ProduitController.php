@@ -41,7 +41,7 @@ class ProduitController extends Controller
                 $produit->image = $imagePath;
                 $produit->description = $request->description;
                 $produit->categorie_produit_id = $request->categorie_produit_id;
-                $this->saveImage($request, 'image', 'images', $produit, 'image');
+                $imagePath = null;
                 $produit->save();
 
                 return response()->json(['message' => 'Produit ajouté avec succès', 'produit' => $produit], 201);

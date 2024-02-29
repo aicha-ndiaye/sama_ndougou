@@ -158,15 +158,16 @@ class LivreurController extends Controller
 
     public function CommandeTerminee(Request $request, $commandeId)
     {
+        // $livreur = Livreur::find(auth()->user()->livreur->id);
+        $livreur = Auth::guard('api')->user()->livreur;
 
-        $livreur = Livreur::find(auth()->user()->livreur->id);
+
 
         // ON RECUPERE  la livraison associée à la commande
         $livraisons = Livraison::where('livreur_id', $livreur->id)
             ->where('commande_id', $commandeId)
             ->get();
-        //     $user=User::where('id',$commande->user_id)->first();
-        // $user->notify(new CommandeEnAttente());
+            // dd($livraisons);
 
         // ICI On verifie si la livraison existe
         if ($livraisons->all() == null) {
@@ -176,14 +177,19 @@ class LivreurController extends Controller
         // onverifie si la cmmande n'est pas affecte a quelqu'un
         foreach ($livraisons as $livraison) {
             if ($livraison->livreur_id !== $livreur->id) {
-                return response()->json(['message' => 'Vous n\'avez pas le droit de modifier cette livraison'], 403);
+                return response()->json(['message' => 'Vous n\'avez pas le droit de modifier cette livraison',
+                    'statut'=>403
+            ]);
             }
 
             //  on verifie si la commande est déjà terminée avant de le modifier
             if ($livraison->statut === 'terminee') {
-                return response()->json(['message' => 'Désolé, la commande est déjà terminée. Vous ne pouvez pas la modifier.'], 403);
-            }
+                return response()->json(['message' => 'Désolé, la commande est déjà terminée. Vous ne pouvez pas la modifier.',
+                'statut'=>403
+            ]);
 
+            }
+            // dd($livraison);
             // Mettons à jour le statut de la livraison à "terminée" après la livraison
             $livraison->update(['statut' => 'terminée']);
 

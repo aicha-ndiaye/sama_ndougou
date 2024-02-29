@@ -43,13 +43,15 @@ class CommandeController extends Controller
     public function createCommande(createCommandeRequest $request)
 {
     $user = Auth::guard('api')->user();
-    // $panier = Panier::where('user_id', $user->id)->get();
-
-    // if (count($panier) == 0) {
-    //     return response()->json(['status' => 404, 'status_message' => 'Le panier est vide ou n\'existe pas.']);
-    // }
-
     try {
+        foreach ($request->input('panier') as $produit) {
+            $produitExist = Produit::where('id', $produit['produit_id'])->where('quantiteTotale', '>', 0)->first();
+
+            if (!$produitExist || $produit['nombre_produit'] > $produitExist->quantiteTotale) {
+                return response()->json(['status' => 400, 'status_message' => 'Quantité de produit insuffisante.']);
+            }
+
+        }
     $commande = Commande::create([
         'dateCommande' => Carbon::now(),
         'user_id' => $user->id,
@@ -58,24 +60,9 @@ class CommandeController extends Controller
     ]);
 
     $montantTotal = 0;
-    // $quantiteTotal = 0;
 
-    // $produitsPanier = Panier::where('user_id', $user->id)->with('produit')->get();
-
-    // foreach ($produitsPanier as $produit) {
-    //     $montantTotal += $produit->quantite * $produit->produit->prix;
-    //     $quantiteTotal += $produit->quantite;
-
-    //     DetailProduit::create([
-    //         'commande_id' => $commande->id,
-    //         'produit_id' => $produit->produit->id,
-    //         'montant' => $produit->quantite * $produit->produit->prix,
-    //         'nombre_produit' => $produit->quantite,
-    //     ]);
       $user=User::where('id',$commande->user_id)->first();
         $user->notify(new CommandeEnAttente());
-
-        // $produit->delete();
         foreach ($request->input('panier') as $produit) {
             DetailProduit::create([
                 'commande_id' => $commande->id,

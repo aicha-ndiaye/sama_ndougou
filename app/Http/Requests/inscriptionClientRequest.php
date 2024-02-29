@@ -27,7 +27,12 @@ class InscriptionClientRequest extends FormRequest
         return [
             'nom' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z]+$/'],
             'prenom' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z ]+$/'],
-            'email' => ['required', 'email', 'unique:users,email'],
+            'email' => [
+                'required',
+                'email',
+                'unique:users,email',
+                'regex:/^[^0-9][^@]+@[^@]+\.[a-zA-Z]{2,4}$/'
+            ],
             'password' => ['required', Password::min(6)->letters()->numbers()],
             'adresse' => ['required', 'string', 'regex:/^[a-zA-Z0-9 ]+$/'],
             'telephone' => ['required', 'regex:/^7\d{8}$/'],
@@ -68,7 +73,7 @@ class InscriptionClientRequest extends FormRequest
             'telephone.regex' => 'Le téléphone doit commencer par 7 suivi de 8 chiffres.',
             'image.image' => 'Le fichier doit être une image.',
             'image.mimes' => 'Le fichier doit être de type :values.',
- 
+
         ];
     }
 }

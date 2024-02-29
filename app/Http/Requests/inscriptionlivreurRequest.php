@@ -27,8 +27,13 @@ class InscriptionLivreurRequest extends FormRequest
         return [
             'nom' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z]+$/'],
             'prenom' => ['required', 'string', 'min:2', 'regex:/^[a-zA-Z ]+$/'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => Password::defaults(),
+            'email' => [
+                'required',
+                'email',
+                'unique:users,email',
+                'regex:/^[^0-9][^@]+@[^@]+\.[a-zA-Z]{2,4}$/'
+            ],
+            'password' => ['required', Password::min(6)->letters()->numbers()],
             'adresse' => ['required', 'string', 'regex:/^[a-zA-Z0-9 ]+$/'],
             'telephone' => ['required', 'regex:/^7\d{8}$/'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif'],
