@@ -163,7 +163,6 @@ class userController extends Controller
         }
     }
 
-
     public function modifieProfileAdmin(Request $request)
     {
         $admin = auth()->user();
@@ -234,9 +233,6 @@ class userController extends Controller
     return response()->json(['message' => 'Mot de passe modifié avec succès'], 200);
 }
 
-
-
-
 public function resetPassword(Request $request, User $user)
 {
     $validator = Validator::make($request->all(), [
@@ -262,8 +258,6 @@ public function resetPassword(Request $request, User $user)
         'user' => $user,
     ]);
 }
-
-
 
 public function listerClients()
 {
@@ -296,35 +290,5 @@ public function blocqueLivreur(User $user)
     }
 }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

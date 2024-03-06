@@ -1,8 +1,8 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "sama Ndougou",
-        "description": "L'API Sama Ndougou offre une interface de programmation permettant d'interagir avec la plateforme  dédiée à la vente de légumes en ligne. Cette API fournit les fonctionnalités nécessaires pour accéder aux données et aux fonctionnalités de la plateforme.Offrant ainsi une expérience d'achat de légumes en ligne fluide et conviviale.",
+        "title": "sama ndougou",
+        "description": "L'API Sama Ndougou offre une interface de programmation permettant d'interagir avec la plateforme dédiée à la vente de légumes en ligne. Cette API fournit les fonctionnalités nécessaires pour accéder aux données et aux fonctionnalités de la plateforme.Offrant ainsi une expérience d'achat de légumes en ligne fluide et conviviale",
         "version": "1.0.0"
     },
     "security": [
@@ -23,6 +23,51 @@
         "multipart/form-data"
     ],
     "paths": {
+        "/api/ListerCommandeAffecter": {
+            "get": {
+                "summary": "ListeCommandeAffecter",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {},
+                                "example": ""
+                            }
+                        }
+                    }
+                },
+                "tags": [
+                    "gestion livreur"
+                ],
+                "parameters": [
+                    {
+                        "in": "header",
+                        "name": "User-Agent",
+                        "type": "string"
+                    }
+                ]
+            }
+        },
         "/api/listerLivreur": {
             "get": {
                 "summary": "listerLivreur",
@@ -199,7 +244,7 @@
                 }
             }
         },
-        "/api/AffecterLivreur/2": {
+        "/api/AffecterLivreur/{commande}": {
             "post": {
                 "summary": "AffecterLivreur",
                 "description": "",
@@ -245,6 +290,11 @@
                     "gestion livreur"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "commande",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -358,7 +408,7 @@
                 ]
             }
         },
-        "/api/CommandeTerminee/1": {
+        "/api/CommandeTerminee/{commande}": {
             "post": {
                 "summary": "CommandeTerminee",
                 "description": "",
@@ -404,6 +454,11 @@
                     "gestion commande"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "commande",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -676,83 +731,7 @@
                 ]
             }
         },
-        "/api/createCommande": {
-            "post": {
-                "summary": "creer commande",
-                "description": "",
-                "responses": {
-                    "201": {
-                        "description": "Created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Unauthorize",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "gestion commande"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "adresse_de_livraison": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "example": {
-                                "adresse_de_livraison": "liberte"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/deleteAvis/3": {
+        "/api/deleteAvis/id": {
             "delete": {
                 "summary": "delete avis",
                 "description": "",
@@ -799,6 +778,11 @@
                 ],
                 "parameters": [
                     {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
                         "in": "header",
                         "name": "User-Agent",
                         "type": "string"
@@ -811,7 +795,7 @@
                 ]
             }
         },
-        "/api/updateAvis/2": {
+        "/api/updateAvis/{id}": {
             "post": {
                 "summary": "update avis",
                 "description": "",
@@ -858,6 +842,11 @@
                 ],
                 "parameters": [
                     {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
                         "in": "header",
                         "name": "User-Agent",
                         "type": "string"
@@ -880,7 +869,7 @@
                                 }
                             },
                             "example": {
-                                "contenu": "je ne suis pas satisfait"
+                                "contenu": "jai modifie l'avis"
                             }
                         }
                     }
@@ -997,18 +986,22 @@
                                 "properties": {
                                     "produit_id": {
                                         "type": "string"
+                                    },
+                                    "contenu": {
+                                        "type": "string"
                                     }
                                 }
                             },
                             "example": {
-                                "produit_id": "1"
+                                "produit_id": "1",
+                                "contenu": "c'est un avis"
                             }
                         }
                     }
                 }
             }
         },
-        "/api/blocqueLivreur/4": {
+        "/api/blocqueLivreur/{user}": {
             "post": {
                 "summary": "bloquer utilisateur",
                 "description": "",
@@ -1055,6 +1048,11 @@
                 ],
                 "parameters": [
                     {
+                        "in": "path",
+                        "name": "user",
+                        "type": "string"
+                    },
+                    {
                         "in": "header",
                         "name": "User-Agent",
                         "type": "string"
@@ -1067,78 +1065,7 @@
                 ]
             }
         },
-        "/api/resetPassword": {
-            "post": {
-                "summary": "New Request",
-                "description": "",
-                "responses": {
-                    "201": {
-                        "description": "Created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Unauthorize",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "gestion blog"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "nom": {
-                                        "type": "string"
-                                    }
-                                }
-                            },
-                            "example": {
-                                "nom": "sene"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/recherchePost/3": {
+        "/api/recherchePost/{id}": {
             "get": {
                 "summary": "recherche post",
                 "description": "",
@@ -1252,14 +1179,14 @@
                                 }
                             },
                             "example": {
-                                "nomCategorie": "recette"
+                                "nomCategorie": "astuce"
                             }
                         }
                     }
                 }
             }
         },
-        "/api/deletePost/2": {
+        "/api/deletePost/{id}": {
             "delete": {
                 "summary": "delete post",
                 "description": "",
@@ -1305,6 +1232,11 @@
                     "gestion blog"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -1468,7 +1400,7 @@
                 }
             }
         },
-        "/api/updatePost/2": {
+        "/api/updatePost/{id}": {
             "post": {
                 "summary": "update post",
                 "description": "",
@@ -1514,6 +1446,11 @@
                     "gestion blog"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",
@@ -1652,7 +1589,7 @@
                             "example": {
                                 "nom": "sen",
                                 "prenom": "bicha",
-                                "email": "bichasen@gmail.com",
+                                "email": "bicha@gmail.com",
                                 "adresse": "liberte6",
                                 "telephone": "773400419",
                                 "image": "",
@@ -1741,110 +1678,6 @@
                                 "password": "passer123",
                                 "ancien_password": "passer1234",
                                 "nouveau_password": "passer1234"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/api/modifieProfileAdmin": {
-            "post": {
-                "summary": "modifieProfileAdmin",
-                "description": "",
-                "responses": {
-                    "201": {
-                        "description": "Created successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthenticated",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Unauthorize",
-                        "content": {
-                            "application/json": {
-                                "schema": {},
-                                "example": ""
-                            }
-                        }
-                    }
-                },
-                "tags": [
-                    "gestion authentification"
-                ],
-                "parameters": [
-                    {
-                        "in": "header",
-                        "name": "User-Agent",
-                        "type": "string"
-                    },
-                    {
-                        "in": "header",
-                        "name": "Authorization",
-                        "type": "string"
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "nom": {
-                                        "type": "string"
-                                    },
-                                    "prenom": {
-                                        "type": "string"
-                                    },
-                                    "adresse": {
-                                        "type": "string"
-                                    },
-                                    "telephone": {
-                                        "type": "string"
-                                    },
-                                    "email": {
-                                        "type": "string"
-                                    },
-                                    "password": {
-                                        "type": "string"
-                                    },
-                                    "image": {
-                                        "type": "string",
-                                        "format": "binary"
-                                    }
-                                }
-                            },
-                            "example": {
-                                "nom": "aichouuu",
-                                "prenom": "diouf",
-                                "adresse": "liberte6",
-                                "telephone": "773400419",
-                                "email": "aicha@gmail.com",
-                                "password": "passer123",
-                                "image": {
-                                    "type": "string",
-                                    "format": "binary"
-                                }
                             }
                         }
                     }
@@ -2156,31 +1989,27 @@
                                     "image": {
                                         "type": "string",
                                         "format": "binary"
-                                    },
-                                    "": {
-                                        "type": "string"
                                     }
                                 }
                             },
                             "example": {
-                                "nom": "ba",
-                                "prenom": "magid",
-                                "email": "magid@gmail.com",
+                                "nom": "ngom",
+                                "prenom": "bourama",
+                                "email": "bourama@gmail.com",
                                 "password": "passer123",
                                 "adresse": "medina",
                                 "telephone": "778754343",
                                 "image": {
                                     "type": "string",
                                     "format": "binary"
-                                },
-                                "": ""
+                                }
                             }
                         }
                     }
                 }
             }
         },
-        "/api/rechercheProduit/1": {
+        "/api/rechercheProduit/{id}": {
             "get": {
                 "summary": "recherche produit",
                 "description": "",
@@ -2218,25 +2047,19 @@
                 ],
                 "parameters": [
                     {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
                         "in": "header",
                         "name": "User-Agent",
                         "type": "string"
                     }
-                ],
-                "requestBody": {
-                    "content": {
-                        "multipart/form-data": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {}
-                            },
-                            "example": {}
-                        }
-                    }
-                }
+                ]
             }
         },
-        "/api/updateProduit/2": {
+        "/api/updateProduit/{id}": {
             "post": {
                 "summary": "update produit",
                 "description": "",
@@ -2283,6 +2106,11 @@
                 ],
                 "parameters": [
                     {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
+                    {
                         "in": "header",
                         "name": "User-Agent",
                         "type": "string"
@@ -2321,7 +2149,7 @@
                                 }
                             },
                             "example": {
-                                "nomProduit": "pimentt",
+                                "nomProduit": "modifie",
                                 "prix": "200",
                                 "quantiteTotale": "10",
                                 "description": "kndk, nfjrifjeiohkn",
@@ -2336,7 +2164,7 @@
                 }
             }
         },
-        "/api/deleteProduit/3": {
+        "/api/deleteProduit/{id}": {
             "delete": {
                 "summary": "delete produit",
                 "description": "",
@@ -2382,6 +2210,11 @@
                     "gestion produit"
                 ],
                 "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "string"
+                    },
                     {
                         "in": "header",
                         "name": "User-Agent",

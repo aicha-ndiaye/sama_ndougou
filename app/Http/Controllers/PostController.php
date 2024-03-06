@@ -30,9 +30,9 @@ class PostController extends Controller
                 $post->nomPost = $request->nomPost;
                 $post->titrePost = $request->titrePost;
                 $post->description = $request->description;
-                $post->image = $request->image;
                 $post->datePost = $request->datePost;
                 $post->categorie_blog_id = $request->categorie_blog_id;
+                $this->saveImage($request, 'image', 'images', $post, 'image');
 
                 $post->save();
 
@@ -44,7 +44,15 @@ class PostController extends Controller
             return response()->json(['message' => 'Vous devez être connecté pour effectuer cette action'], 401);
         }
     }
-
+    private function saveImage($request, $fileKey, $path, $produit, $fieldName)
+    {
+        if ($request->file($fileKey)) {
+            $file = $request->file($fileKey);
+            $filename = date('YmdHi') . $file->getClientOriginalName();
+            $file->move(public_path($path), $filename);
+            $produit->$fieldName = $filename;
+        }
+    }
 
     public function updatePost(Request $request, string $id)
     {
@@ -65,9 +73,9 @@ class PostController extends Controller
         $post->nomPost = $request->nomPost;
         $post->titrePost = $request->titrePost;
         $post->description = $request->description;
-        $post->image = $request->image;
         $post->datePost = $request->datePost;
         $post->categorie_blog_id = $request->categorie_blog_id;
+        $this->saveImage($request, 'image', 'images', $post, 'image');
         $post->save();
 
         return response()->json(['message' => 'post modifié avec succès', 'post' => $post], 200);

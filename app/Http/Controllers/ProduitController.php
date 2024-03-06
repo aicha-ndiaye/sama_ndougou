@@ -21,7 +21,6 @@ class ProduitController extends Controller
     if ($user) {
         // Vérifie le rôle de l'utilisateur
         if ($user->role_id == 1) {
-            $imagePath = null;
 
             // Vérifie si le produit existe déjà
             $produitExistant = Produit::where('nomProduit', $request->nomProduit)->first();
@@ -38,10 +37,10 @@ class ProduitController extends Controller
                 $produit->nomProduit = $request->nomProduit;
                 $produit->prix = $request->prix;
                 $produit->quantiteTotale = $request->quantiteTotale;
-                $produit->image = $imagePath;
                 $produit->description = $request->description;
                 $produit->categorie_produit_id = $request->categorie_produit_id;
-                $imagePath = null;
+
+      $this->saveImage($request, 'image', 'images', $produit, 'image');
                 $produit->save();
 
                 return response()->json(['message' => 'Produit ajouté avec succès', 'produit' => $produit], 201);
@@ -79,9 +78,6 @@ private function saveImage($request, $fileKey, $path, $produit, $fieldName)
                     return response()->json(['message' => 'produit non trouvée'], 404);
                 }
 
-
-                $this->saveImage($request, 'image', 'images', $produit, 'image');
-
                 // Calculons la différence de quantité
                 $quantiteDifference = $request->quantiteTotale - $produit->quantiteTotale;
 
@@ -92,6 +88,7 @@ private function saveImage($request, $fileKey, $path, $produit, $fieldName)
                 $produit->nomProduit = $request->nomProduit;
                 $produit->prix = $request->prix;
                 $produit->description = $request->description;
+                $this->saveImage($request, 'image', 'images', $produit, 'image');
 
                 $produit->save();
 

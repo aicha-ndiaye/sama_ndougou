@@ -59,21 +59,14 @@ public function indexAvis()
     public function updateAvis(Request $request, string $id)
     {
         $user = Auth::guard('api')->user();
-        if ($user->role_id == 1) { $validator=Validator::make($request->all(),[
-            'contenu' => 'required|string|min:3',
-            'id' => 'required|numeric',
 
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
         $avis = AvisClient::find($id);
         $avis->contenu = $request->contenu;
         $avis->save();
 
         return response()->json(['message' => 'avis modifié avec succès', 'avis' => $avis], 200);
     }
-        }
+        
 
 
         public function deleteAvis(deleteAvisRequest $request, $id)

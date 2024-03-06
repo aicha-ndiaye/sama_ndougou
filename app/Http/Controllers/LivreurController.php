@@ -161,8 +161,6 @@ class LivreurController extends Controller
         // $livreur = Livreur::find(auth()->user()->livreur->id);
         $livreur = Auth::guard('api')->user()->livreur;
 
-
-
         // ON RECUPERE  la livraison associée à la commande
         $livraisons = Livraison::where('livreur_id', $livreur->id)
             ->where('commande_id', $commandeId)
